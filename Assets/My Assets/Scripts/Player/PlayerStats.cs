@@ -23,6 +23,8 @@ public class PlayerStats : MonoBehaviour
     }
 
     public Queue<PlayerElement> activeElementQueue = new Queue<PlayerElement>();
+    public PlayerElement m_primaryElement;
+    public PlayerElement m_secondaryElement;
 
     public PlayerElement fireElement = new PlayerElement(Elements.Fire);
     public PlayerElement waterElement = new PlayerElement(Elements.Water);
@@ -71,5 +73,10 @@ public class PlayerStats : MonoBehaviour
         }
 
         activeElementQueue.Enqueue(playerElement);
+
+
+        //Update player elements
+        m_primaryElement = playerElement;
+        m_secondaryElement = activeElementQueue.Peek();
     }
 }

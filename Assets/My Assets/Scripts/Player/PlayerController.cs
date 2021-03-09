@@ -94,6 +94,10 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        if(Input.GetKeyDown(KeyCode.F))
+        {
+            CastSpell();
+        }
     }
 
     private void Shoot(int primaryOrSecondary)
@@ -119,17 +123,32 @@ public class PlayerController : MonoBehaviour
         m_projectile.GetComponent<ProjectileLogic>().FireProjectile(direction);
     }
 
-    //Updates primary projectile and secondary projectile, parameter is primaryProjectile (the element player last pressed)
-    private void UpdateElementProjectile(GameObject primaryProjectile)
+    private void UpdateElementProjectile()
     {
         if(m_playerStats.activeElementQueue.Count == 0)
         {
             return;
         }
 
-        m_primaryProjectile = primaryProjectile;
+        switch (m_playerStats.m_primaryElement.elementType)
+        {
+            case Elements.Fire:
+                m_primaryProjectile = m_fireProjectilePrefab;
+                break;
 
-        switch (m_playerStats.activeElementQueue.Peek().elementType)
+            case Elements.Water:
+                m_primaryProjectile = m_waterProjectilePrefab;
+                break;
+
+            case Elements.Earth:
+                m_primaryProjectile = m_earthProjectilePrefab;
+                break;
+
+            default:
+                break;
+        }
+
+        switch (m_playerStats.m_secondaryElement.elementType)
         {
             case Elements.Fire:
                 m_secondaryProjectile = m_fireProjectilePrefab;
@@ -149,25 +168,48 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    private void CastSpell()
+    {
+        if (m_playerStats.activeElementQueue.Count == 0)
+        {
+            return;
+        }
+
+        var elementQueue = m_playerStats.activeElementQueue;
+
+        if(elementQueue.Contains(m_playerStats.fireElement) && elementQueue.Contains(m_playerStats.earthElement))
+        {
+            Debug.Log("Cast Fire + Earth!");
+        }
+        else if(elementQueue.Contains(m_playerStats.fireElement) && elementQueue.Contains(m_playerStats.waterElement))
+        {
+            Debug.Log("Cast Fire + Water!");
+        }
+        else if(elementQueue.Contains(m_playerStats.waterElement) && elementQueue.Contains(m_playerStats.earthElement))
+        {
+            Debug.Log("Cast Water + Earth!");
+        }
+    }
+
     private void SwitchElementListener()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             m_playerStats.ActivateElement(Elements.Fire);
-            UpdateElementProjectile(m_fireProjectilePrefab);
-            UpdateElementsHUD(Elements.Fire, m_playerStats.activeElementQueue.Peek().elementType);
+            UpdateElementProjectile();
+            UpdateElementsHUD(m_playerStats.m_primaryElement.elementType, m_playerStats.m_secondaryElement.elementType);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             m_playerStats.ActivateElement(Elements.Water);
-            UpdateElementProjectile(m_waterProjectilePrefab);
-            UpdateElementsHUD(Elements.Water, m_playerStats.activeElementQueue.Peek().elementType);
+            UpdateElementProjectile();
+            UpdateElementsHUD(m_playerStats.m_primaryElement.elementType, m_playerStats.m_secondaryElement.elementType);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             m_playerStats.ActivateElement(Elements.Earth);
-            UpdateElementProjectile(m_earthProjectilePrefab);
-            UpdateElementsHUD(Elements.Earth, m_playerStats.activeElementQueue.Peek().elementType);
+            UpdateElementProjectile();
+            UpdateElementsHUD(m_playerStats.m_primaryElement.elementType, m_playerStats.m_secondaryElement.elementType);
         }
     }
 
