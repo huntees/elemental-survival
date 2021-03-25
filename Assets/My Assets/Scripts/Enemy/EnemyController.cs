@@ -16,6 +16,8 @@ public class EnemyController : MonoBehaviour
     private float m_nextAttackTime = 0.0f;
 
     private bool isDead = false;
+    private bool isStunned = false;
+    [SerializeField] private GameObject m_stunnedParticle;
 
     public event Action enemyDies;
 
@@ -26,9 +28,11 @@ public class EnemyController : MonoBehaviour
     {
         m_enemyStats.ResetStats();
 
-        //Enabling a range of stuff thats disabled when enemy dies
+        //Enabling a range of stuff that are disabled when enemy dies
         isDead = false;
         m_agent.isStopped = false;
+        isStunned = false;
+        m_stunnedParticle.SetActive(false);
         GetComponent<BoxCollider>().enabled = true;
 
         //Enable following
@@ -46,7 +50,7 @@ public class EnemyController : MonoBehaviour
     {
         m_enemyStats = GetComponent<EnemyStats>();
         m_player = GameObject.Find("Player").transform;
-        if(m_TempManuallyPlaced)
+        if (m_TempManuallyPlaced)
         {
             InvokeRepeating("FollowPlayer", 0f, 0.5f);
         }
@@ -54,7 +58,7 @@ public class EnemyController : MonoBehaviour
 
     void FixedUpdate()
     {
-        m_animator.SetFloat("Move Speed", m_agent.velocity.magnitude, 0f, Time.deltaTime);    
+        m_animator.SetFloat("Move Speed", m_agent.velocity.magnitude, 0f, Time.deltaTime);
     }
 
     void FollowPlayer()
@@ -65,19 +69,19 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(isDead)
+        if (isDead || isStunned)
         {
-            return ;
+            return;
         }
-        
+
         //Attack
-        if((m_player.position - transform.position).magnitude <= 2f)
+        if ((m_player.position - transform.position).magnitude <= 2f)
         {
             if (Time.time >= m_nextAttackTime)
             {
                 Attack();
                 m_nextAttackTime = Time.time + m_enemyStats.attackFrequency;
-            } 
+            }
         }
     }
 
@@ -104,9 +108,9 @@ public class EnemyController : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        if(isDead)
+        if (isDead)
         {
-            return ;
+            return;
         }
 
         m_animator.SetTrigger("Take Damage");
@@ -117,9 +121,13 @@ public class EnemyController : MonoBehaviour
         {
             m_animator.SetTrigger("Die");
             isDead = true;
+            GetComponent<BoxCollider>().enabled = false;
+            m_stunnedParticle.SetActive(false);
+
+            StopAllCoroutines();
             CancelInvoke();
             m_agent.isStopped = true;
-            GetComponent<BoxCollider>().enabled = false;
+
 
             //inform SpawnManager this enemy died
             enemyDies?.Invoke();
@@ -134,16 +142,38 @@ public class EnemyController : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    void OnDrawGizmosSelected()
-    {
-        if (m_attackPoint == null)
-            return;
-
-        Gizmos.DrawWireSphere(m_attackPoint.position, 0.7f);
-    }
-
     public void ChangeElement(Elements element)
     {
         m_enemyStats.ChangeElement(element);
     }
+
+    public void Stun(float seconds)
+    {
+        if(isStunned)
+        {
+            StopCoroutine(StunCooldown(seconds));
+        }
+
+        isStunned = true;
+        m_stunnedParticle.SetActive(true);
+        m_agent.isStopped = true;
+        StartCoroutine(StunCooldown(seconds));
+    }
+
+    IEnumerator StunCooldown(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        isStunned = false;
+        m_stunnedParticle.SetActive(false);
+        m_agent.isStopped = false;
+    }
+
+
+    //void OnDrawGizmosSelected()
+    //{
+    //    if (m_attackPoint == null)
+    //        return;
+
+    //    Gizmos.DrawWireSphere(m_attackPoint.position, 0.7f);
+    //}
 }

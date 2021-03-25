@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 m_Move;
 
     //Shooting
+    [Header ("Projectiles")]
     [SerializeField] private GameObject m_fireProjectilePrefab;
     [SerializeField] private GameObject m_waterProjectilePrefab;
     [SerializeField] private GameObject m_earthProjectilePrefab;
@@ -23,7 +24,11 @@ public class PlayerController : MonoBehaviour
     private GameObject m_projectile;
     private GameObject m_primaryProjectile;
     private GameObject m_secondaryProjectile;
-    
+
+    //Spells
+    [Header("Spells")]
+    [SerializeField] private GameObject m_earthShatterPrefab;
+
     //Update HUD HP
     public event Action<int, int> HUD_updateHP;
     public event Action<int, int> HUD_updateMana;
@@ -179,7 +184,7 @@ public class PlayerController : MonoBehaviour
 
         if(elementQueue.Contains(m_playerStats.fireElement) && elementQueue.Contains(m_playerStats.earthElement))
         {
-            Debug.Log("Cast Fire + Earth!");
+            CastEarthShatter();
         }
         else if(elementQueue.Contains(m_playerStats.fireElement) && elementQueue.Contains(m_playerStats.waterElement))
         {
@@ -189,6 +194,15 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Cast Water + Earth!");
         }
+    }
+
+    private void CastEarthShatter()
+    {
+        
+        var spell = Instantiate(m_earthShatterPrefab, m_projectileBarrel.position + new Vector3(0, -0.7f, 0), Quaternion.identity);
+        Vector3 direction = (m_mouseRayPosition - transform.position).normalized;
+        direction = new Vector3(direction.x, 0, direction.z);
+        spell.transform.rotation = Quaternion.LookRotation(direction);
     }
 
     private void SwitchElementListener()

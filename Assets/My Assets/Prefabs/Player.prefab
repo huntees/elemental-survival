@@ -35289,8 +35289,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bab42cbeacaa84a4eac8594b6f3600d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 20
-  mana: 0
+  maxHealth: 20
+  currentHealth: 0
+  maxMana: 100
+  currentMana: 0
   attackSpeed: 10
   movementSpeed: 5
 --- !u!114 &2065023657930895624
@@ -35312,6 +35314,8 @@ MonoBehaviour:
   m_earthProjectilePrefab: {fileID: 2581085455896608175, guid: 46f8dbe148e29da4a9fb55bc1e528645,
     type: 3}
   m_projectileBarrel: {fileID: 1799653187}
+  m_earthShatterPrefab: {fileID: 3242092821236697988, guid: caf9863e315009848acfebfce998e49d,
+    type: 3}
 --- !u!1 &2065023658008494979
 GameObject:
   m_ObjectHideFlags: 0

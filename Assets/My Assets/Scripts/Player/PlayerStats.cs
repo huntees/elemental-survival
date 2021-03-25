@@ -11,14 +11,15 @@ public class PlayerStats : MonoBehaviour
     public float attackSpeed = 1f;
     public float movementSpeed = 5f;
 
-    public class PlayerElement
+    public struct PlayerElement
     {
         public Elements elementType;
-        public int elementLevel = 0;
+        public int elementLevel;
 
         public PlayerElement(Elements element)
         {
             elementType = element;
+            elementLevel = 0;
         }
     }
 
