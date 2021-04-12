@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour 
 {
-    public int maxHealth = 20;
-    public int currentHealth;
-    public int maxMana = 100;
-    public int currentMana;
-    public float attackSpeed = 1f;
-    public float movementSpeed = 5f;
+    public float m_maxHealth = 20;
+    [HideInInspector] public float m_currentHealth;
+    public float m_maxMana = 100;
+    [HideInInspector] public float m_currentMana;
+    public float m_attackSpeed = 1f;
+    public float m_movementSpeed = 5f;
 
-    public struct PlayerElement
+    public class PlayerElement
     {
         public Elements elementType;
         public int elementLevel;
@@ -23,7 +23,7 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
-    public Queue<PlayerElement> activeElementQueue = new Queue<PlayerElement>();
+    public Queue<PlayerElement> m_activeElementQueue = new Queue<PlayerElement>();
     public PlayerElement m_primaryElement;
     public PlayerElement m_secondaryElement;
 
@@ -33,11 +33,8 @@ public class PlayerStats : MonoBehaviour
 
     void Awake()
     {
-        fireElement.elementLevel++;
-        waterElement.elementLevel++;
-        earthElement.elementLevel++;
-        currentHealth = maxHealth;
-        currentMana = maxMana;
+        m_currentHealth = m_maxHealth;
+        m_currentMana = m_maxMana;
     }
 
     public void ActivateElement(Elements element)
@@ -68,16 +65,55 @@ public class PlayerStats : MonoBehaviour
             return ;
         }
 
-        if (activeElementQueue.Count >= 2)
+        if (m_activeElementQueue.Count >= 2)
         {
-            activeElementQueue.Dequeue();
+            m_activeElementQueue.Dequeue();
         }
 
-        activeElementQueue.Enqueue(playerElement);
+        m_activeElementQueue.Enqueue(playerElement);
 
 
         //Update player elements
         m_primaryElement = playerElement;
-        m_secondaryElement = activeElementQueue.Peek();
+        m_secondaryElement = m_activeElementQueue.Peek();
+    }
+
+    public void GiveElement(Elements element)
+    {
+        switch (element)
+        {
+            case Elements.Fire:
+                fireElement.elementLevel++;
+                break;
+
+            case Elements.Water:
+                waterElement.elementLevel++;
+                break;
+
+            case Elements.Earth:
+                earthElement.elementLevel++;
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    public int GetElementLevel(Elements element)
+    {
+        switch (element)
+        {
+            case Elements.Fire:
+                return fireElement.elementLevel;
+
+            case Elements.Water:
+                return waterElement.elementLevel;
+
+            case Elements.Earth:
+                return earthElement.elementLevel;
+
+            default:
+                return 0;
+        }
     }
 }

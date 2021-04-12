@@ -17,12 +17,15 @@ public class SpawnManager : MonoBehaviour
     private GameObject m_instantiatedEnemy;
     public int enemiesLeft = 0;
     public bool isSpawning = false;
-    
+
+    private int m_elementCount;
 
     // Start is called before the first frame update
     void Start()
     {
         m_enemyObjectPool = GetComponent<ObjectPool>();
+
+        m_elementCount = Elements.GetNames(typeof(Elements)).Length - 1;
     }
 
     public void InitiateEnemySpawn(int numOfEnemies)
@@ -38,7 +41,7 @@ public class SpawnManager : MonoBehaviour
         while (enemiesSpawned < numOfEnemies)
         {
             m_randomSpawnTime = Random.Range(m_minSpawnTime, m_maxSpawnTime);
-            m_randomElement = Random.Range(0, Elements.GetNames(typeof(Elements)).Length);
+            m_randomElement = Random.Range(0, m_elementCount);
             m_randomSpawnIndex = Random.Range(0, m_spawnLocations.Length);
             
             yield return new WaitForSeconds(m_randomSpawnTime);

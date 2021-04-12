@@ -11,28 +11,28 @@ public class EnemyStats : MonoBehaviour
     [SerializeField] private Material m_waterGolemMaterial;
     [SerializeField] private Material m_earthGolemMaterial;
 
-    [SerializeField] private int m_health = 20;
-    public float movementSpeed = 5f;
-    public float attackFrequency = 1f;
-    public float attackRange = 0.5f;
-    
-    public float currentHealth;
+    public float m_maxHealth = 20;
+    public float m_movementSpeed = 5f;
+    public float m_attackFrequency = 1f;
+    public float m_attackRange = 0.5f;
 
-    [SerializeField] private Elements elementType; 
+    [HideInInspector] public float m_currentHealth;
+
+    public Elements m_elementType; 
 
     // Start is called before the first frame update
     void Awake()
     {
         m_meshRender = transform.GetChild(2).GetComponent<SkinnedMeshRenderer>();
 
-        currentHealth = m_health;
+        m_currentHealth = m_maxHealth;
     }
 
     public void ChangeElement(Elements element)
     {
-        elementType = element;
+        m_elementType = element;
 
-        switch (elementType)
+        switch (m_elementType)
         {
             case Elements.Fire:
                 m_meshRender.material = m_fireGolemMaterial;
@@ -50,6 +50,6 @@ public class EnemyStats : MonoBehaviour
 
     public void ResetStats()
     {
-        currentHealth = m_health;
+        m_currentHealth = m_maxHealth;
     }
 }

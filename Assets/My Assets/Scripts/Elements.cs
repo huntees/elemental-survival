@@ -6,5 +6,6 @@ public enum Elements
 {
     Fire,
     Water,
-    Earth
+    Earth,
+    Neutral
 }

@@ -46,7 +46,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_spawnManager: {fileID: 58989337832328551}
   m_HUDManager: {fileID: 0}
-  m_cooloffPeriod: 60
+  m_playerController: {fileID: 2065023657930895624, guid: c5618482e8c263945bfa514b56668948,
+    type: 3}
+  m_cooloffPeriod: 10
   m_enemiesSpawnPerWave: 5
   m_maxAdditionalEnemy: 3
 --- !u!1001 &5968681563551308241

@@ -4,6 +4,15 @@ using UnityEngine;
 
 public class EarthShatter : MonoBehaviour
 {
+    [Header("Base Values")]
+    [SerializeField] private float m_damage = 5f;
+    [SerializeField] private float m_stunDuration = 0f;
+
+    [Header("Damage Increase Per Level")]
+    [SerializeField] private float m_damageIncrease = 5f;
+    [SerializeField] private float m_stunDurationIncrease = 1f;
+
+    [Header("Misc")]
     [SerializeField] private Transform m_parentTransform;
     private float m_scaleExtension = 0f;
     private float m_yVelocity = 0f;
@@ -12,7 +21,7 @@ public class EarthShatter : MonoBehaviour
 
     void Start()
     {
-        Destroy(gameObject, 2.5f);
+        Destroy(gameObject, 2f);
     }
 
     // Update is called once per frame
@@ -24,13 +33,19 @@ public class EarthShatter : MonoBehaviour
 
     }
 
+    public void SetElementLevel(int fireLevel, int earthLevel)
+    {
+        m_damage += m_damageIncrease * fireLevel;
+        m_stunDuration += m_stunDurationIncrease * earthLevel;
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
             m_collidedEnemy = other.GetComponent<EnemyController>();
-            m_collidedEnemy.Stun(1);
-            m_collidedEnemy.TakeDamage(10);
+            m_collidedEnemy.TakeDamage(m_damage, Elements.Fire);
+            m_collidedEnemy.Stun(m_stunDuration);
         }
     }
 }

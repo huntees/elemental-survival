@@ -264,9 +264,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f2b9da6ac7ae154b907079b0cf626e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_elementType: 2
+  m_damage: 5
+  m_projectileSpeed: 15
+  m_damageIncrease: 3
+  m_baseDamageVariance: 2
   m_hitPrefab: {fileID: 146426693988456624, guid: 2fc3d94f8195b6d459371d276d2601d6,
     type: 3}
-  m_projectileSpeed: 15
 --- !u!1 &4068751706117857848
 GameObject:
   m_ObjectHideFlags: 0

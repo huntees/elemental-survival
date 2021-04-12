@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8446813221179185216}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 3239631483931583776}
   - component: {fileID: 3331525346799826512}
   - component: {fileID: 3330814919581056146}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: RockDebris
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4583,7 +4583,7 @@ GameObject:
   - component: {fileID: 3236596652302325226}
   - component: {fileID: 3331130409579505240}
   - component: {fileID: 3330796651839360648}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: EarthCrack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9300,7 +9300,7 @@ GameObject:
   - component: {fileID: 3239404855127594506}
   - component: {fileID: 3331335805734478410}
   - component: {fileID: 3332525687124775156}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FireBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14053,7 +14053,7 @@ GameObject:
   - component: {fileID: 3239430885827391458}
   - component: {fileID: 3330545328331577836}
   - component: {fileID: 3330847414086895556}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: RockSpikeSmall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18698,7 +18698,7 @@ GameObject:
   - component: {fileID: 3236866333169496712}
   - component: {fileID: 3330620291393492078}
   - component: {fileID: 3330730939374409480}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: RockSpike
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23412,7 +23412,7 @@ GameObject:
   - component: {fileID: 3236879757189110792}
   - component: {fileID: 3331036711138229214}
   - component: {fileID: 3332188610240459718}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: EarthShatterSpell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28240,7 +28240,7 @@ GameObject:
   - component: {fileID: 3239675745581086568}
   - component: {fileID: 3331378235850377398}
   - component: {fileID: 3332406113167975094}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FireEmbers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -32903,7 +32903,7 @@ GameObject:
   - component: {fileID: 6770459848108002608}
   - component: {fileID: 3566430880434278763}
   - component: {fileID: 2006264329995501863}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}

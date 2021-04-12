@@ -1,11 +1,22 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ProjectileLogic : MonoBehaviour
 {
+    [Header("Projectile Base Values")]
+    [SerializeField] private Elements m_elementType;
+    [SerializeField] private int m_damage = 5;
+    [SerializeField] private float m_projectileSpeed = 15.0f;
+
+    [Header("Damage Increase (Addition to Element Level)")]
+    [SerializeField] private int m_damageIncrease = 3;
+
+    [Header("Damage Variance (Addition to Element Level)")]
+    [SerializeField] private int m_baseDamageVariance = 2;
+    private int m_maxDamageThreshold;
+    private int m_minDamageThreshold;
+
+    [Header("On Hit Effect")]
     [SerializeField] private GameObject m_hitPrefab;
-    [SerializeField] private float m_projectileSpeed = 15f;
 
     private GameObject collidedObject;
 
@@ -13,6 +24,15 @@ public class ProjectileLogic : MonoBehaviour
     {
         Rigidbody projectileRB = GetComponent<Rigidbody>();
         projectileRB.AddForce(shootDirection * m_projectileSpeed, ForceMode.Impulse);
+    }
+
+    public void SetElementLevel(int elementLevel)
+    {
+        m_damage += m_damageIncrease * elementLevel;
+
+        m_minDamageThreshold = m_damage - m_baseDamageVariance - (int)(elementLevel * 0.5f);
+        m_maxDamageThreshold = m_damage + m_baseDamageVariance + (int)(elementLevel * 0.5f);
+        m_damage = Random.Range(m_minDamageThreshold, m_maxDamageThreshold + 1);
     }
 
     void OnCollisionEnter(Collision collision)
@@ -27,9 +47,9 @@ public class ProjectileLogic : MonoBehaviour
                 Destroy(hitEffect, 2f);
             }
 
-            if(collidedObject.CompareTag("Enemy"))
+            if (collidedObject.CompareTag("Enemy"))
             {
-                collidedObject.GetComponent<EnemyController>().TakeDamage(10);
+                collidedObject.GetComponent<EnemyController>().TakeDamage(m_damage, m_elementType);
             }
 
             Destroy(gameObject);
