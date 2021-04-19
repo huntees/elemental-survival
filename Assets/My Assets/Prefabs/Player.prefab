@@ -35180,6 +35180,7 @@ GameObject:
   - component: {fileID: -5455752729723851132}
   - component: {fileID: 8764929916045781817}
   - component: {fileID: 2065023657930895624}
+  - component: {fileID: 1560270491}
   m_Layer: 2
   m_Name: Player
   m_TagString: Player
@@ -35290,12 +35291,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bab42cbeacaa84a4eac8594b6f3600d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 20
-  currentHealth: 0
-  maxMana: 100
-  currentMana: 0
-  attackSpeed: 10
-  movementSpeed: 5
+  m_movementSpeed: 5
+  m_attackDamage: 0
+  m_attackSpeed: 1
+  m_maxHealth: 100
+  m_currentHealth: 0
+  m_maxMana: 100
+  m_currentMana: 0
+  m_manaRegen: 1
 --- !u!114 &2065023657930895624
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35322,6 +35325,21 @@ MonoBehaviour:
   m_geyserPrefab: {fileID: 5050110927118739691, guid: 033f4c2f8a63a3745a66ec31b69e0f87,
     type: 3}
   m_geyserCooldown: 3
+  m_eventSystem: {fileID: 0}
+--- !u!114 &1560270491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2065023657930895627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cb69797913e2dc4b840c4f72c9b03dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_items: []
+  m_space: 6
 --- !u!1 &2065023658008494979
 GameObject:
   m_ObjectHideFlags: 0

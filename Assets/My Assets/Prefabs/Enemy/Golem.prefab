@@ -5814,7 +5814,7 @@ GameObject:
   - component: {fileID: 8208136177843491980}
   - component: {fileID: 8306642010225658091}
   - component: {fileID: 8053906782975639628}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: Health Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5939,7 +5939,7 @@ GameObject:
   - component: {fileID: 6746143357339007867}
   - component: {fileID: 5399882399914459965}
   - component: {fileID: 8547364652385910230}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}

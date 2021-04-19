@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
+    private PlayerInventory m_playerInventory;
+
+    [Header("Enemy Gold Bounty")]
+    [SerializeField] private int m_maxBounty = 40;
+    [SerializeField] private int m_minBounty = 34;
+    private int m_bountyAmount;
+
+    [Header("Enemy Spawn Properties")]
     [SerializeField] Transform[] m_spawnLocations;
     private ObjectPool m_enemyObjectPool;
 
@@ -15,8 +23,8 @@ public class SpawnManager : MonoBehaviour
     private float m_randomSpawnTime = 4f;
 
     private GameObject m_instantiatedEnemy;
-    public int enemiesLeft = 0;
-    public bool isSpawning = false;
+    public int m_enemiesLeft = 0;
+    public bool m_isSpawning = false;
 
     private int m_elementCount;
 
@@ -25,6 +33,7 @@ public class SpawnManager : MonoBehaviour
     {
         m_enemyObjectPool = GetComponent<ObjectPool>();
 
+        m_playerInventory = PlayerInventory.instance;
         m_elementCount = Elements.GetNames(typeof(Elements)).Length - 1;
     }
 
@@ -35,7 +44,7 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator SpawnEnemies(int numOfEnemies)
     {
-        isSpawning = true;
+        m_isSpawning = true;
         int enemiesSpawned = 0;
 
         while (enemiesSpawned < numOfEnemies)
@@ -53,14 +62,18 @@ public class SpawnManager : MonoBehaviour
             m_instantiatedEnemy.SetActive(true);
 
             enemiesSpawned++;
-            enemiesLeft++;
+            m_enemiesLeft++;
         }
 
-        isSpawning = false;
+        m_isSpawning = false;
     }
 
+    //Triggers when an enemy dies
     public void DecreaseEnemyCount()
     {
-        enemiesLeft--;
+        m_enemiesLeft--;
+
+        m_bountyAmount = Random.Range(m_minBounty, m_maxBounty + 1);
+        m_playerInventory.GivePlayerGold(m_bountyAmount);
     }
 }

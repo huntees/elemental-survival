@@ -4,12 +4,18 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour 
 {
-    public float m_maxHealth = 20;
+    public float m_movementSpeed = 5.0f;
+
+    public float m_attackDamage = 0.0f;
+    public float m_attackSpeed = 1.0f;
+
+    public float m_maxHealth = 100f;
     [HideInInspector] public float m_currentHealth;
-    public float m_maxMana = 100;
+    public float m_maxMana = 100f;
     [HideInInspector] public float m_currentMana;
-    public float m_attackSpeed = 1f;
-    public float m_movementSpeed = 5f;
+    public float m_manaRegen = 1.0f;
+
+    
 
     public class PlayerElement
     {
@@ -115,5 +121,57 @@ public class PlayerStats : MonoBehaviour
             default:
                 return 0;
         }
+    }
+
+    public void RestoreHealth(float amount)
+    {
+        m_currentHealth += amount;
+
+        if (m_currentHealth > m_maxHealth)
+        {
+            m_currentHealth = m_maxHealth;
+        }
+    }
+
+    public void RestoreMana(float amount)
+    {
+        m_currentMana += amount;
+
+        if (m_currentMana > m_maxMana)
+        {
+            m_currentMana = m_maxMana;
+        }
+    }
+
+    public void ApplyItemStats(float movement, float attackDamage, float attackSpeed, float health, float mana, float manaRegen)
+    {
+        m_movementSpeed += movement;
+
+        m_attackDamage += attackDamage;
+        m_attackSpeed += attackSpeed;
+
+        m_currentHealth += m_currentHealth * (health / m_maxHealth);
+        m_maxHealth += health;
+
+        m_currentMana += m_currentMana * (mana / m_maxMana);
+        m_maxMana += mana;
+
+        m_manaRegen += manaRegen;
+    }
+
+    public void RemoveItemStats(float movement, float attackDamage, float attackSpeed, float health, float mana, float manaRegen)
+    {
+        m_movementSpeed -= movement;
+
+        m_attackDamage -= attackDamage;
+        m_attackSpeed -= attackSpeed;
+
+        m_currentHealth -= m_currentHealth * (health / m_maxHealth);
+        m_maxHealth -= health;
+
+        m_currentMana -= m_currentMana * (mana / m_maxMana);
+        m_maxMana -= mana;
+
+        m_manaRegen -= manaRegen;
     }
 }

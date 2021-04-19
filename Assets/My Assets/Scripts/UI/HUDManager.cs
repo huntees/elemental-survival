@@ -14,6 +14,8 @@ public class HUDManager : MonoBehaviour
     [Header("Health & Mana")]
     [SerializeField] private Slider m_healthSlider;
     [SerializeField] private Slider m_manaSlider;
+    [SerializeField] private TMP_Text m_healthText;
+    [SerializeField] private TMP_Text m_manaText;
 
     [Header("Elements")]
     [SerializeField] private Image m_primaryElementSlot;
@@ -44,12 +46,16 @@ public class HUDManager : MonoBehaviour
     [SerializeField] private Image m_cooldownImage;
     [SerializeField] private TMP_Text m_cooldownText;
     private GameObject m_cooldownTextObject;
-    private float m_spellCooldownText;
-    private float m_spellCooldown;
+    private float m_currentSpellCooldown;
+    private float m_spellCooldownDuration;
 
     [Header("Spell Frame Sprites")]
     [SerializeField] private Sprite m_activeFrameSprite;
     [SerializeField] private Sprite m_disabledFrameSprite;
+
+    [Header("Shop")]
+    [SerializeField] private GameObject m_shopObject;
+    [HideInInspector] public bool m_isShopActive = false;
 
     // Start is called before the first frame update
     void Awake()
@@ -67,11 +73,11 @@ public class HUDManager : MonoBehaviour
 
     void Update()
     {
-        if(m_spellCooldownText > 0)
+        if(m_currentSpellCooldown > 0.0f)
         {
-            m_spellCooldownText -= Time.deltaTime;
-            m_cooldownText.text = Mathf.RoundToInt(m_spellCooldownText).ToString();
-            m_cooldownImage.fillAmount = m_spellCooldownText / m_spellCooldown;
+            m_currentSpellCooldown -= Time.deltaTime;
+            m_cooldownText.text = Mathf.RoundToInt(m_currentSpellCooldown).ToString();
+            m_cooldownImage.fillAmount = m_currentSpellCooldown / m_spellCooldownDuration;
         }
         else if(m_cooldownTextObject.activeInHierarchy)
         {
@@ -88,6 +94,12 @@ public class HUDManager : MonoBehaviour
     public void UpdateStatusText(string text)
     {
         m_statusText.text = text;
+    }
+
+    public void ShowShop(bool show)
+    {
+        m_shopObject.SetActive(show);
+        m_isShopActive = show;
     }
 
     #region Player Stuff
@@ -117,12 +129,14 @@ public class HUDManager : MonoBehaviour
     {
         m_healthSlider.maxValue = maxHealth;
         m_healthSlider.value = currentHealth;
+        m_healthText.text = Mathf.RoundToInt(currentHealth).ToString() + " / " + maxHealth.ToString();
     }
 
     private void UpdateMana(float currentMana, float maxMana)
     {
         m_manaSlider.maxValue = maxMana;
         m_manaSlider.value = currentMana;
+        m_manaText.text = Mathf.RoundToInt(currentMana).ToString() + " / " + maxMana.ToString();
     }
 
     private void UpdateElements(Elements primary, Elements secondary)
@@ -195,10 +209,10 @@ public class HUDManager : MonoBehaviour
 
         if (!m_cooldownTextObject.activeInHierarchy && cooldownTimer > 0.0f)
         {
-          m_cooldownTextObject.SetActive(true);
+            m_cooldownTextObject.SetActive(true);
         }
-        m_spellCooldownText = cooldownTimer;
-        m_spellCooldown = cooldown;
+        m_currentSpellCooldown = cooldownTimer;
+        m_spellCooldownDuration = cooldown;
 
     }
 

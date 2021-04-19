@@ -33,6 +33,7 @@ public class ProjectileLogic : MonoBehaviour
         m_minDamageThreshold = m_damage - m_baseDamageVariance - (int)(elementLevel * 0.5f);
         m_maxDamageThreshold = m_damage + m_baseDamageVariance + (int)(elementLevel * 0.5f);
         m_damage = Random.Range(m_minDamageThreshold, m_maxDamageThreshold + 1);
+        //Debug.Log("Variance = " + m_minDamageThreshold + "-" + m_maxDamageThreshold + " = " + m_damage);
     }
 
     void OnCollisionEnter(Collision collision)

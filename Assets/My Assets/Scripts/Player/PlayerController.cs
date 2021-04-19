@@ -2,9 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
+    #region Singleton 
+    public static PlayerController instance;
+
+    void Awake()
+    {
+        if (instance != null)
+        {
+            Debug.LogWarning("PlayerController already has an instance");
+            return;
+        }
+
+        instance = this;
+        Initialisation();
+    }
+
+    #endregion
+
     private PlayerStats m_playerStats;
 
     //Movement
@@ -25,6 +43,8 @@ public class PlayerController : MonoBehaviour
     private ProjectileLogic m_projectileLogic;
     private GameObject m_primaryProjectile;
     private GameObject m_secondaryProjectile;
+
+    private Vector3 direction;
 
     //Spells
     [Header("Spells")]
@@ -63,7 +83,9 @@ public class PlayerController : MonoBehaviour
     private Vector3 m_mouseRayPosition = new Vector3(0, 0, 0);
     private Vector3 m_mouseRayPositionWithoutY = new Vector3(0, 0, 0);
 
-    void Awake()
+    [SerializeField] private EventSystem m_eventSystem;
+
+    private void Initialisation()
     {
         //Initialisation
         m_playerStats = GetComponent<PlayerStats>();
@@ -96,14 +118,6 @@ public class PlayerController : MonoBehaviour
 
         m_rigidbody.MovePosition(myTransform.position + m_Move * m_playerStats.m_movementSpeed * Time.deltaTime);
 
-        //Look at mouse cursor **moved to utilities**
-        //m_mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-        //if (Physics.Raycast(m_mouseRay, out m_mouseRayHit))
-        //{
-        //    m_mouseRayVector = new Vector3(m_mouseRayHit.point.x, m_mouseRayHit.point.y, m_mouseRayHit.point.z);
-        //    myTransform.LookAt(m_mouseRayVector);
-        //}
-
         //Look at mouse cursor
         myTransform.LookAt(m_mouseRayPositionWithoutY);
         myTransform.rotation = Quaternion.Euler(0f, myTransform.eulerAngles.y, 0f);  //Stops x and z rotation to keep upright
@@ -112,37 +126,38 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        //m_mouseRayPosition = Utils.GetCursorPosition();
         GetCursorPosition();
 
         SwitchElementListener();
 
-        if (Time.time >= m_nextAttackTime)
-        {
-            if (Input.GetKey(KeyCode.Mouse0))
-            {
-                Shoot(0);
-                m_nextAttackTime = Time.time + (1f - (m_playerStats.m_attackSpeed * 0.01f));
-            }
-            else if (Input.GetKey(KeyCode.Mouse1))
-            {
-                Shoot(1);
-                m_nextAttackTime = Time.time + (1f - (m_playerStats.m_attackSpeed * 0.01f));
-            }
-        }
+        AttackListener();
 
-        if (Input.GetKey(KeyCode.Space))
-        {
-            CastSpell?.Invoke();
-        }
-
-        if (m_isSteamBlastPlaying && Input.GetKeyUp(KeyCode.Space))
-        {
-            m_steamBlastParticle.Stop();
-            m_isSteamBlastPlaying = false;
-        }
+        CastSpellListener();
 
         HandleSpellCooldowns();
+    }
+
+    #region Combat
+
+    private void AttackListener()
+    {
+        if (Time.time >= m_nextAttackTime)
+        {
+            //makes sure mouse is not over UI
+            if (!m_eventSystem.IsPointerOverGameObject())
+            {
+                if (Input.GetKey(KeyCode.Mouse0))
+                {
+                    Shoot(0);
+                    m_nextAttackTime = Time.time + (1f - (m_playerStats.m_attackSpeed * 0.01f));
+                }
+                else if (Input.GetKey(KeyCode.Mouse1))
+                {
+                    Shoot(1);
+                    m_nextAttackTime = Time.time + (1f - (m_playerStats.m_attackSpeed * 0.01f));
+                }
+            }
+        }
     }
 
     private void Shoot(int primaryOrSecondary)
@@ -166,11 +181,44 @@ public class PlayerController : MonoBehaviour
         }
 
         m_animator.SetTrigger("Projectile Right Attack 01");
-
-        Vector3 direction = (m_mouseRayPositionWithoutY - transform.position).normalized;
-        direction = new Vector3(direction.x, 0, direction.z);
-        m_projectileLogic.FireProjectile(direction);
+        m_projectileLogic.FireProjectile(GetPlayerDirection());
     }
+
+    private void CastSpellListener()
+    {
+        //Cast whenever key is held
+        if (CastSpell == CastSteamBlast && Input.GetKey(KeyCode.Space))
+        {
+            CastSpell?.Invoke();
+        }
+        //Cast only when key is pressed
+        else if (Input.GetKeyDown(KeyCode.Space))
+        {
+            CastSpell?.Invoke();
+        }
+
+        if (m_isSteamBlastPlaying && Input.GetKeyUp(KeyCode.Space))
+        {
+            m_steamBlastParticle.Stop();
+            m_isSteamBlastPlaying = false;
+        }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        m_animator.SetTrigger("Take Damage");
+        m_playerStats.m_currentHealth -= damage;
+
+
+        if (m_playerStats.m_currentHealth <= 0)
+        {
+            m_animator.SetTrigger("Die");
+        }
+
+        UpdateHealthHUD();
+    }
+
+    #endregion
 
     #region Spells
 
@@ -261,6 +309,13 @@ public class PlayerController : MonoBehaviour
             UpdateSpellCooldownHUD(0.0f, 0.0f);
         }
 
+        //turns off steamblast if it is still being used after switching
+        if (m_isSteamBlastPlaying && CastSpell != CastSteamBlast)
+        {
+            m_steamBlastParticle.Stop();
+            m_isSteamBlastPlaying = false;
+        }
+
         UpdateSpellHUD(m_activeSpell);
     }
 
@@ -312,6 +367,12 @@ public class PlayerController : MonoBehaviour
 
     private void SwitchElementListener()
     {
+
+        if(Input.GetKey(KeyCode.LeftShift))
+        {
+            return ;
+        }
+
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             m_playerStats.ActivateElement(Elements.Fire);
@@ -334,20 +395,68 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
+    #region Items
 
-    public void TakeDamage(float damage)
+    public void UseItem(UsableItemCode usableItemCode)
     {
-        m_animator.SetTrigger("Take Damage");
-        m_playerStats.m_currentHealth -= damage;
-
-
-        if (m_playerStats.m_currentHealth <= 0)
+        switch (usableItemCode)
         {
-            m_animator.SetTrigger("Die");
+            case UsableItemCode.Health_Potion: 
+                RestoreHealth(50.0f);
+                break;
+
+            case UsableItemCode.Mana_Potion:
+                RestoreMana(50.0f);
+                break;
+
+            case UsableItemCode.Force_Staff: 
+                UseForceStaff();
+                break;
+
+            default:
+                break;
         }
+    }
+
+    //---------------------------------------------------------Consumables---------------------------------------------------------
+    private void RestoreHealth(float amount)
+    {
+        m_playerStats.RestoreHealth(amount);
+        //play effect on restore
 
         UpdateHealthHUD();
     }
+
+    private void RestoreMana(float amount)
+    {
+        m_playerStats.RestoreMana(amount);
+        //play effect on restore
+
+        UpdateManaHUD();
+    }
+
+    //---------------------------------------------------------Actives--------------------------------------------------------------
+    private void UseForceStaff()
+    {
+        m_rigidbody.AddForce(GetPlayerDirection() * 10f, ForceMode.Impulse);
+        //m_rigidbody.velocity = Vector3.zero;
+    }
+
+    public void ApplyItemStats(float movement, float attackDamage, float attackSpeed, float health, float mana, float manaRegen)
+    {
+        m_playerStats.ApplyItemStats(movement, attackDamage, attackSpeed, health, mana, manaRegen);
+        UpdateHealthHUD();
+        UpdateManaHUD();
+    }
+
+    public void RemoveItemStats(float movement, float attackDamage, float attackSpeed, float health, float mana, float manaRegen)
+    {
+        m_playerStats.RemoveItemStats(movement, attackDamage, attackSpeed, health, mana, manaRegen);
+        UpdateHealthHUD();
+        UpdateManaHUD();
+    }
+
+    #endregion
 
     #region HUD Updates
 
@@ -399,6 +508,14 @@ public class PlayerController : MonoBehaviour
             // y needed for spell spawning on the right y level
             m_mouseRayPosition = new Vector3(m_mouseRayHit.point.x, m_mouseRayHit.point.y, m_mouseRayHit.point.z);
         }
+    }
+
+    private Vector3 GetPlayerDirection()
+    {
+        direction = (m_mouseRayPositionWithoutY - transform.position).normalized;
+        direction = new Vector3(direction.x, 0, direction.z);
+
+        return direction;
     }
 
     public void GiveElement(Elements element)
