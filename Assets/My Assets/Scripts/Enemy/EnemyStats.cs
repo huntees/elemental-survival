@@ -10,13 +10,19 @@ public class EnemyStats : MonoBehaviour
     [SerializeField] private Material m_fireGolemMaterial;
     [SerializeField] private Material m_waterGolemMaterial;
     [SerializeField] private Material m_earthGolemMaterial;
+    [SerializeField] private Material m_natureGolemMaterial;
+    [SerializeField] private Material m_airGolemMaterial;
 
     public float m_maxHealth = 20;
-    public float m_movementSpeed = 5f;
+    [HideInInspector] public float m_currentHealth;
+
+    public float m_movementSpeed = 2f;
+
+    public float m_attackDamage = 12f;
     public float m_attackFrequency = 1f;
     public float m_attackRange = 0.5f;
 
-    [HideInInspector] public float m_currentHealth;
+
 
     public Elements m_elementType; 
 
@@ -44,6 +50,14 @@ public class EnemyStats : MonoBehaviour
 
             case Elements.Earth:
                 m_meshRender.material = m_earthGolemMaterial;
+                break;
+
+            case Elements.Nature:
+                m_meshRender.material = m_natureGolemMaterial;
+                break;
+
+            case Elements.Air:
+                m_meshRender.material = m_airGolemMaterial;
                 break;
         }
     }

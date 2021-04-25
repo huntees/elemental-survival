@@ -34,12 +34,6 @@ public class GameManager : MonoBehaviour
 
         // -1 because theres "neutral element"
         m_elementCount = Elements.GetNames(typeof(Elements)).Length - 1;
-
-        //remove on release
-        m_playerController.GiveElement(Elements.Fire);
-        m_playerController.GiveElement(Elements.Water);
-        m_playerController.GiveElement(Elements.Earth);
-        PlayerInventory.instance.GivePlayerGold(5000);
     }
 
     // Update is called once per frame

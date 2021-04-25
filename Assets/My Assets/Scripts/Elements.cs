@@ -3,5 +3,7 @@
     Fire,
     Water,
     Earth,
+    Nature,
+    Air,
     Neutral
 }

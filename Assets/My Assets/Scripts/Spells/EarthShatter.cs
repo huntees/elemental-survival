@@ -33,7 +33,7 @@ public class EarthShatter : MonoBehaviour
 
     }
 
-    public void SetElementLevel(int fireLevel, int earthLevel)
+    public void SetValueIncrease(int fireLevel, int earthLevel)
     {
         m_damage += m_damageIncrease * fireLevel;
         m_stunDuration += m_stunDurationIncrease * earthLevel;

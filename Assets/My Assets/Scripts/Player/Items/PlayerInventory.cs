@@ -51,7 +51,7 @@ public class PlayerInventory : MonoBehaviour
         if (item.hasStats)
         {
             m_playerController.ApplyItemStats(item.movementSpeedAmount, item.attackDamageAmount, item.attackSpeedAmount,
-                item.healthAmount, item.manaAmount, item.manaRegenAmount);
+                item.healthAmount, item.manaAmount, item.manaRegenAmount, item.spellAmplificationAmount);
         }
 
         HUD_updateInventory?.Invoke();
@@ -60,7 +60,7 @@ public class PlayerInventory : MonoBehaviour
     public void SellItem(Item item)
     {
         //If item sold is boots
-        if (item.name.Contains("Boots"))
+        if (item.movementSpeedAmount != 0.0f)
         {
             m_playerHasBoots = false;
         }
@@ -71,7 +71,7 @@ public class PlayerInventory : MonoBehaviour
         if (item.hasStats)
         {
             m_playerController.RemoveItemStats(item.movementSpeedAmount, item.attackDamageAmount, item.attackSpeedAmount,
-                item.healthAmount, item.manaAmount, item.manaRegenAmount);
+                item.healthAmount, item.manaAmount, item.manaRegenAmount, item.spellAmplificationAmount);
         }
 
         //return 70% item cost
@@ -88,7 +88,7 @@ public class PlayerInventory : MonoBehaviour
         if (item.hasStats)
         {
             m_playerController.RemoveItemStats(item.movementSpeedAmount, item.attackDamageAmount, item.attackSpeedAmount,
-                item.healthAmount, item.manaAmount, item.manaRegenAmount);
+                item.healthAmount, item.manaAmount, item.manaRegenAmount, item.spellAmplificationAmount);
         }
 
         HUD_updateInventory?.Invoke();
@@ -111,7 +111,7 @@ public class PlayerInventory : MonoBehaviour
         }
 
         //If the item being purchased are boots and player already own one
-        if (item.name.Contains("Boots"))
+        if (item.movementSpeedAmount != 0.0f)
         {
             if (m_playerHasBoots)
             {

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b31e2aceaab9be41b57f312d5b2ee66, type: 3}
+  m_Name: NaturesRejuvenationDetails
+  m_EditorClassIdentifier: 
+  name: Nature's Rejuvenation
+  spellCode: 5
+  icon: {fileID: 21300000, guid: 1b784f1e171c6f146b78cb27e6f430b6, type: 3}
+  manaCost: 25
+  showDamageType: 0
+  damageType: 3
+  cooldownDuration: 20
+  activeDescriptionLine1: 'Attract a cloud of butterflies which heal the '
+  activeDescriptionLine2: player every second for a duration.
+  damageScaleInfoLine1: Water increases heal amount
+  damageScaleInfoLine2: Nature increases spell duration

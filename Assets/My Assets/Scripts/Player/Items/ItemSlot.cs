@@ -74,7 +74,7 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
     {
         if (m_item.hasActive && m_currentItemCooldown <= 0.0f)
         {
-            m_playerController.UseItem(m_item.usableItemCode);
+            m_playerController.UseItem(m_item.itemCode);
 
             if (!m_cooldownTextObject.activeInHierarchy)
             {
@@ -85,7 +85,7 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
         }
         else if (m_item.isConsumable)
         {
-            m_playerController.UseItem(m_item.usableItemCode);
+            m_playerController.UseItem(m_item.itemCode);
             ConsumeItem();
         }
     }

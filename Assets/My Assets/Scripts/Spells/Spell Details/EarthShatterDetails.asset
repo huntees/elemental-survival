@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b31e2aceaab9be41b57f312d5b2ee66, type: 3}
+  m_Name: EarthShatterDetails
+  m_EditorClassIdentifier: 
+  name: Earth Shatter
+  spellCode: 1
+  icon: {fileID: 21300000, guid: 2c77ea7fa5dffe34da0560073e24fd81, type: 3}
+  manaCost: 20
+  showDamageType: 1
+  damageType: 0
+  cooldownDuration: 5
+  activeDescriptionLine1: Creates a ridge of fiery stone stunning and
+  activeDescriptionLine2: damaging enemies along its line.
+  damageScaleInfoLine1: Fire increases damage
+  damageScaleInfoLine2: Earth increases stun duration

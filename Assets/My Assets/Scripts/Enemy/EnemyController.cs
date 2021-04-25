@@ -21,6 +21,7 @@ public class EnemyController : MonoBehaviour
     [Header("Elemental Damage")]
     [SerializeField] private float m_vulnerableMultiplier = 2.0f;
     [SerializeField] private float m_resistantMultiplier = 0.5f;
+    [SerializeField] private float m_normalMultiplier = 0.9f;
 
     [Header("HP Bar")]
     [SerializeField] private Canvas m_healthBar;
@@ -35,6 +36,9 @@ public class EnemyController : MonoBehaviour
     private bool m_isPushedUp = false;
     private float m_yPositionBeforePushUp;
     private bool m_triggerFallDown = false;
+
+    [SerializeField] private GameObject m_cyclonePrefab;
+    private bool m_isRotate = false;
 
     //Event
     private Action<float, Elements> takeElementalDamage;
@@ -53,9 +57,13 @@ public class EnemyController : MonoBehaviour
         m_isStunned = false;
         m_stunnedParticle.SetActive(false);
         m_triggerFallDown = false;
+        m_isPushedUp = false;
+        m_isRotate = false;
 
         m_agent.isStopped = false;
         m_agent.updatePosition = true;
+        m_agent.updateRotation = true;
+        m_agent.speed = m_enemyStats.m_movementSpeed;
 
         GetComponent<BoxCollider>().enabled = true;
 
@@ -107,9 +115,17 @@ public class EnemyController : MonoBehaviour
                 {
                     m_agent.isStopped = false;
                 }
+
                 m_agent.updatePosition = true;
+                m_agent.updateRotation = true;
                 m_triggerFallDown = false;
+                m_isRotate = false;
             }
+        }
+
+        if(m_isRotate)
+        {
+            transform.Rotate(Vector3.up * 10.0f);
         }
     }
 
@@ -136,6 +152,8 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    #region Attack
+
     private void Attack()
     {
         m_animator.SetTrigger("Attack");
@@ -156,10 +174,12 @@ public class EnemyController : MonoBehaviour
         {
             if (enemy.gameObject.CompareTag("Player"))
             {
-                enemy.gameObject.GetComponent<PlayerController>().TakeDamage(5);
+                enemy.gameObject.GetComponent<PlayerController>().TakeDamage(m_enemyStats.m_attackDamage);
             }
         }
     }
+
+    #endregion
 
     #region Take Damage
 
@@ -173,60 +193,6 @@ public class EnemyController : MonoBehaviour
         UpdateHealthBar(m_enemyStats.m_currentHealth, m_enemyStats.m_maxHealth);
     }
 
-    private void IfFireElement(float damage, Elements element)
-    {
-        switch (element)
-        {
-            case Elements.Water:
-                m_enemyStats.m_currentHealth -= damage * m_vulnerableMultiplier;
-                break;
-
-            case Elements.Earth:
-                m_enemyStats.m_currentHealth -= damage * m_resistantMultiplier;
-                break;
-
-            default:
-                m_enemyStats.m_currentHealth -= damage;
-                break;
-        }
-    }
-
-    private void IfWaterElement(float damage, Elements element)
-    {
-        switch (element)
-        {
-            case Elements.Earth:
-                m_enemyStats.m_currentHealth -= damage * m_vulnerableMultiplier;
-                break;
-
-            case Elements.Fire:
-                m_enemyStats.m_currentHealth -= damage * m_resistantMultiplier;
-                break;
-
-            default:
-                m_enemyStats.m_currentHealth -= damage;
-                break;
-        }
-    }
-
-    private void IfEarthElement(float damage, Elements element)
-    {
-        switch (element)
-        {
-            case Elements.Fire:
-                m_enemyStats.m_currentHealth -= damage * m_vulnerableMultiplier;
-                break;
-
-            case Elements.Water:
-                m_enemyStats.m_currentHealth -= damage * m_resistantMultiplier;
-                break;
-
-            default:
-                m_enemyStats.m_currentHealth -= damage;
-                break;
-        }
-    }
-
     private void CheckDeath()
     {
         if (m_enemyStats.m_currentHealth <= 0)
@@ -235,6 +201,7 @@ public class EnemyController : MonoBehaviour
             m_isDead = true;
             GetComponent<BoxCollider>().enabled = false;
             m_stunnedParticle.SetActive(false);
+            m_isRotate = false;
 
             StopAllCoroutines();
             CancelInvoke();
@@ -246,6 +213,129 @@ public class EnemyController : MonoBehaviour
 
             //Disables object after some time, m_animator.GetCurrentAnimatorStateInfo(0).length + 1f = 2.34f
             Invoke("DisableObject", 2.34f);
+        }
+    }
+
+    public void ChangeElement(Elements element)
+    {
+
+        //switch takeElementalDamage based of what type the enemy is
+        switch (element)
+        {
+            case Elements.Fire:
+                takeElementalDamage = IfFireElement;
+                break;
+
+            case Elements.Water:
+                takeElementalDamage = IfWaterElement;
+                break;
+
+            case Elements.Earth:
+                takeElementalDamage = IfEarthElement;
+                break;
+
+            case Elements.Nature:
+                takeElementalDamage = IfNatureElement;
+                break;
+
+            case Elements.Air:
+                takeElementalDamage = IfAirElement;
+                break;
+
+            default:
+                break;
+        }
+
+        m_enemyStats.ChangeElement(element);
+    }
+
+    private void IfFireElement(float damage, Elements element)
+    {
+        switch (element)
+        {
+            case Elements.Water:
+                m_enemyStats.m_currentHealth -= damage * m_vulnerableMultiplier;
+                break;
+
+            case Elements.Nature:
+                m_enemyStats.m_currentHealth -= damage * m_resistantMultiplier;
+                break;
+
+            default:
+                m_enemyStats.m_currentHealth -= damage * m_normalMultiplier;
+                break;
+        }
+    }
+
+    private void IfWaterElement(float damage, Elements element)
+    {
+        switch (element)
+        {
+            case Elements.Air:
+                m_enemyStats.m_currentHealth -= damage * m_vulnerableMultiplier;
+                break;
+
+            case Elements.Fire:
+                m_enemyStats.m_currentHealth -= damage * m_resistantMultiplier;
+                break;
+
+            default:
+                m_enemyStats.m_currentHealth -= damage * m_normalMultiplier;
+                break;
+        }
+    }
+
+    private void IfEarthElement(float damage, Elements element)
+    {
+        switch (element)
+        {
+            case Elements.Nature:
+                m_enemyStats.m_currentHealth -= damage * m_vulnerableMultiplier;
+                break;
+
+            case Elements.Air:
+                m_enemyStats.m_currentHealth -= damage * m_resistantMultiplier;
+                break;
+
+            default:
+                m_enemyStats.m_currentHealth -= damage * m_normalMultiplier;
+                break;
+        }
+    }
+
+    private void IfNatureElement(float damage, Elements element)
+    {
+        switch (element)
+        {
+            case Elements.Fire:
+                m_enemyStats.m_currentHealth -= damage * m_vulnerableMultiplier;
+                break;
+
+            case Elements.Earth:
+                m_enemyStats.m_currentHealth -= damage * m_resistantMultiplier;
+                break;
+
+            default:
+                m_enemyStats.m_currentHealth -= damage * m_normalMultiplier;
+                break;
+        }
+    }
+
+    private void IfAirElement(float damage, Elements element)
+    {
+        switch (element)
+        {
+            case Elements.Earth:
+                m_enemyStats.m_currentHealth -= damage * m_vulnerableMultiplier;
+                break;
+
+            case Elements.Water:
+                m_enemyStats.m_currentHealth -= damage * m_resistantMultiplier;
+                break;
+
+            default:
+                m_enemyStats.m_currentHealth -= damage * m_normalMultiplier;
+                break;
         }
     }
 
@@ -290,7 +380,7 @@ public class EnemyController : MonoBehaviour
 
     public void PushUp(float duration)
     {
-        //checking isdead not needed here because if enemy died upon entry, the collider is no longer staying inside the geysey collider and therefore is not triggered
+        //checking isdead not needed here because if enemy died upon entry, the collider no longer stays inside the geysey collider and therefore is not triggered
 
         if (!m_isPushedUp)
         {
@@ -306,8 +396,33 @@ public class EnemyController : MonoBehaviour
         m_isPushedUp = true;
         m_agent.isStopped = true;
         m_agent.updatePosition = false;
+        m_agent.updateRotation = false;
         yield return new WaitForSeconds(seconds);
         m_triggerFallDown = true;
+    }
+
+    public void Cyclone(float duration)
+    {
+        if (m_isPushedUp || m_isDead)
+        {
+            return ;
+        }
+
+        var cyclone = Instantiate(m_cyclonePrefab, transform.position, m_cyclonePrefab.transform.rotation);
+        Cyclone component = cyclone.GetComponent<Cyclone>();
+        component.m_cycloneDuration = duration;
+        component.m_enemyController = this;
+        m_isRotate = true;
+    }
+
+    public void SlowEnemySpeed(float percentage)
+    {
+        m_agent.speed = m_enemyStats.m_movementSpeed * percentage;
+    }
+
+    public void ResetEnemySpeed()
+    {
+        m_agent.speed = m_enemyStats.m_movementSpeed;
     }
 
     #endregion
@@ -320,31 +435,6 @@ public class EnemyController : MonoBehaviour
 
     //    Gizmos.DrawWireSphere(m_attackPoint.position, 0.7f);
     //}
-
-    public void ChangeElement(Elements element)
-    {
-
-        //switch takeElementalDamage based of what type the enemy is
-        switch (element)
-        {
-            case Elements.Fire:
-                takeElementalDamage = IfFireElement;
-                break;
-
-            case Elements.Water:
-                takeElementalDamage = IfWaterElement;
-                break;
-
-            case Elements.Earth:
-                takeElementalDamage = IfEarthElement;
-                break;
-
-            default:
-                break;
-        }
-
-        m_enemyStats.ChangeElement(element);
-    }
 
     private void UpdateHealthBar(float currentHealth, float maxHealth)
     {

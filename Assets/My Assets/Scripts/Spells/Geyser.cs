@@ -8,7 +8,7 @@ public class Geyser : MonoBehaviour
     [SerializeField] private float m_damage = 5f;
 
     [Header("Damage Increase Per Level")]
-    [SerializeField] private float m_damageIncrease = 5f;
+    [SerializeField] private float m_damageIncrease = 3f;
 
     private ParticleSystem m_particleSystem;
 
@@ -27,10 +27,10 @@ public class Geyser : MonoBehaviour
         GetComponent<BoxCollider>().enabled = true;
     }
 
-    public void SetElementLevel(int waterLevel, int earthLevel)
+    public void SetValueIncrease(int waterLevel, int earthLevel)
     {
-        //m_damage += (m_damageIncrease * ((waterLevel + earthLevel) * 0.5f));
         m_damage += m_damageIncrease * waterLevel;
+        m_damage += m_damageIncrease * earthLevel;
     }
 
     void OnTriggerEnter(Collider other)
@@ -38,7 +38,7 @@ public class Geyser : MonoBehaviour
         if (other.gameObject.CompareTag("Enemy"))
         {
             m_collidedEnemy = other.GetComponent<EnemyController>();
-            m_collidedEnemy.TakeDamage(m_damage, Elements.Neutral);
+            m_collidedEnemy.TakeDamage(m_damage, Elements.Water);
         }
     }
 

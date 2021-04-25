@@ -24,34 +24,29 @@ public class HUDManager : MonoBehaviour
     [SerializeField] private TMP_Text m_waterLevelText;
     [SerializeField] private TMP_Text m_earthLevelText;
     [SerializeField] private TMP_Text m_natureLevelText;
-    [SerializeField] private TMP_Text m_lightLevelText;
+    [SerializeField] private TMP_Text m_airLevelText;
     [SerializeField] private TMP_Text m_darkLevelText;
 
     [Header("Element Sprites")]
     [SerializeField] private Sprite m_fireElementSprite;
     [SerializeField] private Sprite m_waterElementSprite;
     [SerializeField] private Sprite m_earthElementSprite;
+    [SerializeField] private Sprite m_natureElementSprite;
+    [SerializeField] private Sprite m_airElementSprite;
 
     [Header("Spell")]
-    [SerializeField] private Image m_spellSlot;
-
-    [Header("Spell Sprites")]
-    [SerializeField] private Sprite m_emptySprite;
-    [SerializeField] private Sprite m_earthShatterSprite;
-    [SerializeField] private Sprite m_steamBlastSprite;
-    [SerializeField] private Sprite m_geyserSprite;
-
-    [Header("Spell Frame")]
-    [SerializeField] private Image m_spellFrame;
-    [SerializeField] private Image m_cooldownImage;
-    [SerializeField] private TMP_Text m_cooldownText;
-    private GameObject m_cooldownTextObject;
-    private float m_currentSpellCooldown;
-    private float m_spellCooldownDuration;
-
-    [Header("Spell Frame Sprites")]
-    [SerializeField] private Sprite m_activeFrameSprite;
-    [SerializeField] private Sprite m_disabledFrameSprite;
+    [SerializeField] private SpellSlot m_spellSlot;
+    [SerializeField] private SpellDetails m_earthShatterDetails;
+    [SerializeField] private SpellDetails m_steamBlastDetails;
+    [SerializeField] private SpellDetails m_geyserDetails;
+    [SerializeField] private SpellDetails m_innerFireDetails;
+    [SerializeField] private SpellDetails m_naturesRejuvenationDetails;
+    [SerializeField] private SpellDetails m_livingArmorDetails;
+    [SerializeField] private SpellDetails m_meteorStrikeDetails;
+    [SerializeField] private SpellDetails m_tornadoDetails;
+    [SerializeField] private SpellDetails m_sandStormDetails;
+    [SerializeField] private SpellDetails m_overchargeDetails;
+    
 
     [Header("Shop")]
     [SerializeField] private GameObject m_shopObject;
@@ -66,24 +61,7 @@ public class HUDManager : MonoBehaviour
         m_playerController.HUD_updateElementTable += UpdateElementTable;
         m_playerController.HUD_updateSpell += UpdateSpell;
         m_playerController.HUD_updateSpellCooldown += UpdateSpellCooldown;
-        m_playerController.HUD_activateSpellCooldownText += ActivateSpellCooldownText;
 
-        m_cooldownTextObject = m_cooldownText.gameObject;
-    }
-
-    void Update()
-    {
-        if(m_currentSpellCooldown > 0.0f)
-        {
-            m_currentSpellCooldown -= Time.deltaTime;
-            m_cooldownText.text = Mathf.RoundToInt(m_currentSpellCooldown).ToString();
-            m_cooldownImage.fillAmount = m_currentSpellCooldown / m_spellCooldownDuration;
-        }
-        else if(m_cooldownTextObject.activeInHierarchy)
-        {
-            m_cooldownTextObject.SetActive(false);
-            m_cooldownImage.fillAmount = 0.0f;
-        }
     }
 
     public void UpdateWaveText(int wave)
@@ -103,6 +81,22 @@ public class HUDManager : MonoBehaviour
     }
 
     #region Player Stuff
+
+    private void UpdateHealth(float currentHealth, float maxHealth)
+    {
+        m_healthSlider.maxValue = maxHealth;
+        m_healthSlider.value = currentHealth;
+        m_healthText.text = Mathf.RoundToInt(currentHealth).ToString() + " / " + maxHealth.ToString();
+    }
+
+    private void UpdateMana(float currentMana, float maxMana)
+    {
+        m_manaSlider.maxValue = maxMana;
+        m_manaSlider.value = currentMana;
+        m_manaText.text = Mathf.RoundToInt(currentMana).ToString() + " / " + maxMana.ToString();
+    }
+
+    #region Elements
     private void UpdateElementTable(Elements element, int level)
     {
         switch (element)
@@ -119,24 +113,17 @@ public class HUDManager : MonoBehaviour
                 m_earthLevelText.text = level.ToString();
                 break;
 
+            case (Elements.Nature):
+                m_natureLevelText.text = level.ToString();
+                break;
+
+            case (Elements.Air):
+                m_airLevelText.text = level.ToString();
+                break;
+
             default:
                 break;
         }
-    }
-
-
-    private void UpdateHealth(float currentHealth, float maxHealth)
-    {
-        m_healthSlider.maxValue = maxHealth;
-        m_healthSlider.value = currentHealth;
-        m_healthText.text = Mathf.RoundToInt(currentHealth).ToString() + " / " + maxHealth.ToString();
-    }
-
-    private void UpdateMana(float currentMana, float maxMana)
-    {
-        m_manaSlider.maxValue = maxMana;
-        m_manaSlider.value = currentMana;
-        m_manaText.text = Mathf.RoundToInt(currentMana).ToString() + " / " + maxMana.ToString();
     }
 
     private void UpdateElements(Elements primary, Elements secondary)
@@ -153,6 +140,14 @@ public class HUDManager : MonoBehaviour
 
             case (Elements.Earth):
                 m_primaryElementSlot.sprite = m_earthElementSprite;
+                break;
+
+            case (Elements.Nature):
+                m_primaryElementSlot.sprite = m_natureElementSprite;
+                break;
+
+            case (Elements.Air):
+                m_primaryElementSlot.sprite = m_airElementSprite;
                 break;
 
             default:
@@ -173,53 +168,76 @@ public class HUDManager : MonoBehaviour
                 m_secondaryElementSlot.sprite = m_earthElementSprite;
                 break;
 
+            case (Elements.Nature):
+                m_secondaryElementSlot.sprite = m_natureElementSprite;
+                break;
+
+            case (Elements.Air):
+                m_secondaryElementSlot.sprite = m_airElementSprite;
+                break;
+
             default:
                 break;
         }
     }
+    #endregion
 
-    private void UpdateSpell(string spellName)
+    #region Spells
+    private void UpdateSpell(SpellCode spell)
     {
-        switch (spellName)
+        switch (spell)
         {
-            case ("EarthShatter"):
-                m_spellSlot.sprite = m_earthShatterSprite;
-                m_spellFrame.sprite = m_activeFrameSprite;
+            case SpellCode.EarthShatter:
+                m_spellSlot.AddSpell(m_earthShatterDetails);
                 break;
 
-            case ("SteamBlast"):
-                m_spellSlot.sprite = m_steamBlastSprite;
-                m_spellFrame.sprite = m_activeFrameSprite;
+            case SpellCode.SteamBlast:
+                m_spellSlot.AddSpell(m_steamBlastDetails);
                 break;
 
-            case ("Geyser"):
-                m_spellSlot.sprite = m_geyserSprite;
-                m_spellFrame.sprite = m_activeFrameSprite;
+            case SpellCode.Geyser:
+                m_spellSlot.AddSpell(m_geyserDetails);
+                break;
+
+            case SpellCode.InnerFire:
+                m_spellSlot.AddSpell(m_innerFireDetails);
+                break;
+
+            case SpellCode.NaturesRejuvenation:
+                m_spellSlot.AddSpell(m_naturesRejuvenationDetails);
+                break;
+
+            case SpellCode.LivingArmor:
+                m_spellSlot.AddSpell(m_livingArmorDetails);
+                break;
+
+            case SpellCode.MeteorStrike:
+                m_spellSlot.AddSpell(m_meteorStrikeDetails);
+                break;
+
+            case SpellCode.Tornado:
+                m_spellSlot.AddSpell(m_tornadoDetails);
+                break;
+
+            case SpellCode.SandStorm:
+                m_spellSlot.AddSpell(m_sandStormDetails);
+                break;
+
+            case SpellCode.Overcharge:
+                m_spellSlot.AddSpell(m_overchargeDetails);
                 break;
 
             default:
-                m_spellSlot.sprite = m_emptySprite;
-                m_spellFrame.sprite = m_disabledFrameSprite;
+                m_spellSlot.ClearSpell();
                 break;
         }
     }
 
     private void UpdateSpellCooldown(float cooldownTimer, float cooldown)
     {
-
-        if (!m_cooldownTextObject.activeInHierarchy && cooldownTimer > 0.0f)
-        {
-            m_cooldownTextObject.SetActive(true);
-        }
-        m_currentSpellCooldown = cooldownTimer;
-        m_spellCooldownDuration = cooldown;
-
+        m_spellSlot.UpdateSpellCooldown(cooldownTimer, cooldown);
     }
-
-    private void ActivateSpellCooldownText()
-    {
-        m_cooldownTextObject.SetActive(true);
-    }
+    #endregion
 
     #endregion
 }

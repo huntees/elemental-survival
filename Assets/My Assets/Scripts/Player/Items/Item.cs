@@ -5,7 +5,7 @@ public class Item : ScriptableObject
 {
     [Header("Name & Icon")]
     new public string name = "New Item";
-    public UsableItemCode usableItemCode = UsableItemCode.Not_Usable;
+    public ItemCode itemCode = ItemCode.NotUsable;
     public Sprite icon = null;
 
     [Header("Cost")]
@@ -33,6 +33,8 @@ public class Item : ScriptableObject
     public float healthAmount = 0.0f;
     public float manaAmount = 0.0f;
     public float manaRegenAmount = 0.0f;
+
+    public float spellAmplificationAmount = 0.0f;
 
     private string tooltipText = "";
 
@@ -66,7 +68,7 @@ public class Item : ScriptableObject
             tooltipText += "\n";
 
             tooltipText += GetMovementSpeedAmountText() + GetAttackDamageAmountText() + GetAttackSpeedAmountText() + 
-                GetHealthAmountText() + GetManaAmountText() + GetManaRegenAmountText();
+                GetHealthAmountText() + GetManaAmountText() + GetManaRegenAmountText() + GetSpellAmplificationAmountText();
         }
 
         return tooltipText;
@@ -130,5 +132,15 @@ public class Item : ScriptableObject
         }
 
         return "+" + manaRegenAmount + " Mana Regen" + "\n";
+    }
+
+    private string GetSpellAmplificationAmountText()
+    {
+        if (spellAmplificationAmount == 0.0f)
+        {
+            return "";
+        }
+
+        return "+" + spellAmplificationAmount + " Spell Amplification" + "\n";
     }
 }

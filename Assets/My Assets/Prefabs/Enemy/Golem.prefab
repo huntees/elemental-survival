@@ -4973,11 +4973,15 @@ MonoBehaviour:
     type: 2}
   m_earthGolemMaterial: {fileID: 2100000, guid: 957781e2e64d0264f970dde36a30bd93,
     type: 2}
+  m_natureGolemMaterial: {fileID: 2100000, guid: 704b1f087972ca14ca6a0979bbaf79bf,
+    type: 2}
+  m_airGolemMaterial: {fileID: 2100000, guid: 64b02bc726d54cf49a8c011a9af88dc5, type: 2}
   m_maxHealth: 20
-  m_movementSpeed: 5
+  m_currentHealth: 0
+  m_movementSpeed: 2
+  m_attackDamage: 12
   m_attackFrequency: 1
   m_attackRange: 0.5
-  m_currentHealth: 0
   m_elementType: 0
 --- !u!114 &832936316
 MonoBehaviour:
@@ -4996,9 +5000,12 @@ MonoBehaviour:
   m_attackPoint: {fileID: 5107114766553715414}
   m_vulnerableMultiplier: 2
   m_resistantMultiplier: 0.5
+  m_normalMultiplier: 0.9
   m_healthBar: {fileID: 1153006977897728150}
   m_healthSlider: {fileID: 8053906782975639628}
   m_stunnedParticle: {fileID: 5036202361917855064}
+  m_cyclonePrefab: {fileID: 1081221806559707322, guid: 1cf0b363b125a3043932ab826b9f9b56,
+    type: 3}
   m_TempManuallyPlaced: 0
 --- !u!1 &1884620628856453888
 GameObject:

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Mana Potion
   m_EditorClassIdentifier: 
   name: Mana Potion
-  usableItemCode: 2
+  itemCode: 2
   icon: {fileID: 21300000, guid: 2b7a66cba102eba469c484eb971d4abb, type: 3}
   cost: 50
   hasActive: 0
@@ -30,3 +30,4 @@ MonoBehaviour:
   healthAmount: 0
   manaAmount: 0
   manaRegenAmount: 0
+  spellAmplificationAmount: 0
