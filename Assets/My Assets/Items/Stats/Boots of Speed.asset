@@ -13,18 +13,23 @@ MonoBehaviour:
   m_Name: Boots of Speed
   m_EditorClassIdentifier: 
   name: Boots of Speed
-  ID: 1
+  itemCode: 0
   icon: {fileID: 21300000, guid: 3d5dd78779b303043a61184a5986e7a5, type: 3}
   cost: 450
   hasActive: 0
   cooldownDuration: 0
+  manaCost: 0
   currentCooldown: 0
-  activeDescription: 
+  activeDescriptionLine1: 
+  activeDescriptionLine2: 
   isConsumable: 0
+  consumableDescription: 
   hasStats: 1
-  movementSpeedAmount: 5
+  movementSpeedAmount: 40
   attackDamageAmount: 0
   attackSpeedAmount: 0
   healthAmount: 0
   manaAmount: 0
   manaRegenAmount: 0
+  spellAmplificationAmount: 0
+  passiveDescriptionLine: 

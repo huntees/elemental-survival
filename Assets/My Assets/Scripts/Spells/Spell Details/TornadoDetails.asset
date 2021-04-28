@@ -17,9 +17,9 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 7a5be357ad9005a4e9ea3e3111b98600, type: 3}
   manaCost: 25
   showDamageType: 1
-  damageType: 1
+  damageType: 4
   cooldownDuration: 15
   activeDescriptionLine1: Unleashes a fast moving tornado which damages
   activeDescriptionLine2: and suspends enemies in cyclones.
-  damageScaleInfoLine1: Water increases damage
-  damageScaleInfoLine2: Air increases distance travelled
+  damageScaleInfoLine1: Air increases damage
+  damageScaleInfoLine2: Water increases distance travelled

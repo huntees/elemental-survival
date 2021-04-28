@@ -170,23 +170,16 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
-    public bool HaveEnoughMana(float amount)
-    {
-        return m_currentMana >= amount;
-    }
-
     public void ApplyItemStats(float movement, float attackDamage, float attackSpeed, float health, float mana, float manaRegen, float spellAmp)
     {
-        m_movementSpeed += movement;
+        m_movementSpeed += movement * 0.05f;
 
         m_attackDamage += attackDamage;
         m_attackSpeed += attackSpeed;
 
-        m_currentHealth += m_currentHealth * (health / m_maxHealth);
-        m_maxHealth += health;
+        AddHealth(health);
+        AddMana(mana);
 
-        m_currentMana += m_currentMana * (mana / m_maxMana);
-        m_maxMana += mana;
 
         m_manaRegen += manaRegen;
 
@@ -195,19 +188,28 @@ public class PlayerStats : MonoBehaviour
 
     public void RemoveItemStats(float movement, float attackDamage, float attackSpeed, float health, float mana, float manaRegen, float spellAmp)
     {
-        m_movementSpeed -= movement;
+        m_movementSpeed -= movement * 0.05f;
 
         m_attackDamage -= attackDamage;
         m_attackSpeed -= attackSpeed;
 
-        m_currentHealth -= m_currentHealth * (health / m_maxHealth);
-        m_maxHealth -= health;
-
-        m_currentMana -= m_currentMana * (mana / m_maxMana);
-        m_maxMana -= mana;
+        AddHealth(-health);
+        AddMana(-mana);
 
         m_manaRegen -= manaRegen;
 
         m_spellAmp -= spellAmp;
+    }
+
+    public void AddHealth(float health)
+    {
+        m_currentHealth += m_currentHealth * (health / m_maxHealth);
+        m_maxHealth += health;
+    }
+
+    public void AddMana(float mana)
+    {
+        m_currentMana += m_currentMana * (mana / m_maxMana);
+        m_maxMana += mana;
     }
 }

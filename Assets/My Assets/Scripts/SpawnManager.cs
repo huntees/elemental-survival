@@ -9,6 +9,7 @@ public class SpawnManager : MonoBehaviour
     [Header("Enemy Gold Bounty")]
     [SerializeField] private int m_maxBounty = 40;
     [SerializeField] private int m_minBounty = 34;
+    [SerializeField] private int m_bountyIncreasePerRound = 1;
     private int m_bountyAmount;
 
     [Header("Enemy Spawn Properties")]
@@ -22,7 +23,17 @@ public class SpawnManager : MonoBehaviour
     private int m_randomElement;
     private float m_randomSpawnTime = 4f;
 
+    [Header("Enemy Stats Increment")]
+    [SerializeField] private float m_healthIncrease = 5.0f;
+    [SerializeField] private float m_movementSpeedIncrease = 0.01f;
+    [SerializeField] private float m_attackDamageIncrease = 2.0f;
+    private float m_currentHealthIncrease = 0.0f;
+    private float m_currentMovementSpeedIncrease = 0.0f;
+    private float m_currentAttackDamageIncrease = 0.0f;
+
     private GameObject m_instantiatedEnemy;
+    private EnemyController m_enemyController;
+
     public int m_enemiesLeft = 0;
     public bool m_isSpawning = false;
 
@@ -31,14 +42,24 @@ public class SpawnManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Initialisations
         m_enemyObjectPool = GetComponent<ObjectPool>();
 
         m_playerInventory = PlayerInventory.instance;
         m_elementCount = Elements.GetNames(typeof(Elements)).Length - 1;
+
+        //To stop increment at wave 1
+        m_currentHealthIncrease = -m_healthIncrease;
+        m_currentMovementSpeedIncrease = -m_movementSpeedIncrease;
+        m_currentAttackDamageIncrease = -m_attackDamageIncrease;
+
+
     }
 
     public void InitiateEnemySpawn(int numOfEnemies)
     {
+        IncrementBounty();
+        UpdateStatsIncrement();
         StartCoroutine(SpawnEnemies(numOfEnemies));
     }
 
@@ -55,10 +76,13 @@ public class SpawnManager : MonoBehaviour
             
             yield return new WaitForSeconds(m_randomSpawnTime);
 
-            //m_instantiatedEnemy = Instantiate(m_enemyPrefab, m_spawnLocations[m_randomSpawnIndex].position, Quaternion.identity);
             m_instantiatedEnemy = m_enemyObjectPool.GetAvailableObject();
-            m_instantiatedEnemy.GetComponent<EnemyController>().ChangeElement((Elements)m_randomElement);
             m_instantiatedEnemy.transform.position = m_spawnLocations[m_randomSpawnIndex].position;
+
+            m_enemyController = m_instantiatedEnemy.GetComponent<EnemyController>();
+            m_enemyController.ChangeElement((Elements)m_randomElement);
+            m_enemyController.IncrementStats(m_currentHealthIncrease, m_currentMovementSpeedIncrease, m_currentAttackDamageIncrease);
+            
             m_instantiatedEnemy.SetActive(true);
 
             enemiesSpawned++;
@@ -68,11 +92,25 @@ public class SpawnManager : MonoBehaviour
         m_isSpawning = false;
     }
 
+    private void UpdateStatsIncrement()
+    {
+        m_currentHealthIncrease += m_healthIncrease;
+        m_currentMovementSpeedIncrease += m_movementSpeedIncrease;
+        m_currentAttackDamageIncrease += m_attackDamageIncrease;
+    }
+
+    private void IncrementBounty()
+    {
+        m_maxBounty += m_bountyIncreasePerRound;
+        m_minBounty += m_bountyIncreasePerRound;
+    }
+
     //Triggers when an enemy dies
     public void DecreaseEnemyCount()
     {
         m_enemiesLeft--;
 
+        //Handling gold bounty here for efficiency instead of having each enemy handle it
         m_bountyAmount = Random.Range(m_minBounty, m_maxBounty + 1);
         m_playerInventory.GivePlayerGold(m_bountyAmount);
     }

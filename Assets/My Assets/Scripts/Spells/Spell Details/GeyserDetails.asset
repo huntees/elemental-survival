@@ -17,7 +17,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 745db8fdca38a76438f80002a63bd187, type: 3}
   manaCost: 20
   showDamageType: 1
-  damageType: 5
+  damageType: 1
   cooldownDuration: 3
   activeDescriptionLine1: Summons a rising geyser that, after a short
   activeDescriptionLine2: 'delay, damages and hurls enemies upwards. '

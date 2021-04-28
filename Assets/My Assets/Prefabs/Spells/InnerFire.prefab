@@ -4770,8 +4770,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_damage: 5
-  m_duration: 2
-  m_damageIncrease: 2
+  m_duration: 3
+  m_damageIncrease: 6
   m_durationIncrease: 1
   m_isActive: 0
 --- !u!1 &4965158614323104159

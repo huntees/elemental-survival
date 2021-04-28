@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Item", menuName = "Items/Item")]
+[CreateAssetMenu(fileName = "New Item", menuName = "Item")]
 public class Item : ScriptableObject
 {
     [Header("Name & Icon")]
@@ -14,6 +14,7 @@ public class Item : ScriptableObject
     [Header("Active")]
     public bool hasActive = false;
     public float cooldownDuration = 0.0f;
+    public float manaCost = 0;
     [HideInInspector] public float currentCooldown = 0.0f;
     public string activeDescriptionLine1 = "";
     public string activeDescriptionLine2 = "";
@@ -36,6 +37,9 @@ public class Item : ScriptableObject
 
     public float spellAmplificationAmount = 0.0f;
 
+    [Header("Passive")]
+    public string passiveDescriptionLine = "";
+
     private string tooltipText = "";
 
     public string GetTooltipText()
@@ -47,8 +51,8 @@ public class Item : ScriptableObject
         {
             tooltipText += "\n";
 
-            tooltipText += "Cooldown: " + cooldownDuration + "\n";
-            tooltipText += activeDescriptionLine1 + "\n";
+            tooltipText += "Cooldown: " + cooldownDuration + "   Mana Cost: " + manaCost + "\n" + "\n";
+            tooltipText += "Active: " + activeDescriptionLine1 + "\n";
 
             if (activeDescriptionLine2 != "")
             {
@@ -60,7 +64,14 @@ public class Item : ScriptableObject
         {
             tooltipText += "\n";
 
-            tooltipText += consumableDescription + "\n";
+            tooltipText += "Consume: " + consumableDescription + "\n";
+        }
+
+        if (passiveDescriptionLine != "")
+        {
+            tooltipText += "\n";
+
+            tooltipText += "Passive: " + passiveDescriptionLine + "\n";
         }
 
         if (hasStats)
@@ -141,6 +152,6 @@ public class Item : ScriptableObject
             return "";
         }
 
-        return "+" + spellAmplificationAmount + " Spell Amplification" + "\n";
+        return "+" + spellAmplificationAmount * 100 + "% Spell Amplification" + "\n";
     }
 }

@@ -4767,10 +4767,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76271aa49fc77c04db1e91db8ca920f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_damage: 0.1
+  m_damage: 0.2
   m_pushBackForce: 0.02
-  m_damageIncrease: 0.05
-  m_pushBackForceIncrease: 0.01
+  m_damageIncrease: 0.1
+  m_pushBackForceIncrease: 0.02
 --- !u!1 &4919969558317270108
 GameObject:
   m_ObjectHideFlags: 0

@@ -4976,7 +4976,7 @@ MonoBehaviour:
   m_natureGolemMaterial: {fileID: 2100000, guid: 704b1f087972ca14ca6a0979bbaf79bf,
     type: 2}
   m_airGolemMaterial: {fileID: 2100000, guid: 64b02bc726d54cf49a8c011a9af88dc5, type: 2}
-  m_maxHealth: 20
+  m_maxHealth: 40
   m_currentHealth: 0
   m_movementSpeed: 2
   m_attackDamage: 12
@@ -4998,6 +4998,7 @@ MonoBehaviour:
   m_animator: {fileID: 1884620628729338442}
   m_agent: {fileID: 832936315}
   m_attackPoint: {fileID: 5107114766553715414}
+  m_trackingDistance: 20
   m_vulnerableMultiplier: 2
   m_resistantMultiplier: 0.5
   m_normalMultiplier: 0.9

@@ -8,13 +8,14 @@
     GreaterHealthPotion,
     GreaterManaPotion,
     RestorationPotion,
-    AnhkOfImmortal,
+    AnkhOfReincarnation,
     RandomElement,
 
     //Actives
     ForceStaff = 101,
     BlinkDagger,
-    Mekansm,
-
-
+    EssenceRing,
+    MendersCharm,
+    ShadowsongsShurikens,
+    LichsPike
 }

@@ -13,18 +13,23 @@ MonoBehaviour:
   m_Name: Boots of Travel
   m_EditorClassIdentifier: 
   name: Boots of Travel
-  ID: 2
+  itemCode: 0
   icon: {fileID: 21300000, guid: b195f546314754b47a76e077c316c8b6, type: 3}
   cost: 2450
   hasActive: 0
   cooldownDuration: 0
+  manaCost: 0
   currentCooldown: 0
-  activeDescription: 
+  activeDescriptionLine1: 
+  activeDescriptionLine2: 
   isConsumable: 0
+  consumableDescription: 
   hasStats: 1
-  movementSpeedAmount: 10
+  movementSpeedAmount: 70
   attackDamageAmount: 0
   attackSpeedAmount: 0
   healthAmount: 0
   manaAmount: 0
   manaRegenAmount: 0
+  spellAmplificationAmount: 0
+  passiveDescriptionLine: 

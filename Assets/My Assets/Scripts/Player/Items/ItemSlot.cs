@@ -72,9 +72,10 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
 
     private void UseItem()
     {
-        if (m_item.hasActive && m_currentItemCooldown <= 0.0f)
+        if (m_item.hasActive && m_currentItemCooldown <= 0.0f && m_playerController.HasEnoughMana(m_item.manaCost))
         {
             m_playerController.UseItem(m_item.itemCode);
+            m_playerController.SpendMana(m_item.manaCost);
 
             if (!m_cooldownTextObject.activeInHierarchy)
             {

@@ -72088,9 +72088,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a512b590cd2f04642b95404ce6622700, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_damage: 0
+  m_damage: 6
   m_duration: 1
-  m_damageIncrease: 5
+  m_damageIncrease: 4
   m_durationIncrease: 1
   m_damageInterval: 1
 --- !u!1 &5525293637752414516

@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08a16f64111e0c64885ca518f86ea16a, type: 3}
+  m_Name: Oblivion Staff
+  m_EditorClassIdentifier: 
+  name: Oblivion Staff
+  itemCode: 0
+  icon: {fileID: 21300000, guid: 81ddbedec184aee49b5293ab00aaa860, type: 3}
+  cost: 3200
+  hasActive: 0
+  cooldownDuration: 0
+  manaCost: 0
+  currentCooldown: 0
+  activeDescriptionLine1: 
+  activeDescriptionLine2: 
+  isConsumable: 0
+  consumableDescription: 
+  hasStats: 1
+  movementSpeedAmount: 0
+  attackDamageAmount: 15
+  attackSpeedAmount: 15
+  healthAmount: 0
+  manaAmount: 100
+  manaRegenAmount: 1.8
+  spellAmplificationAmount: 0

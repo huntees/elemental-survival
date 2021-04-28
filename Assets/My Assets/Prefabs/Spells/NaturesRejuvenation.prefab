@@ -4734,8 +4734,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_healPerSecond: 2
   m_duration: 2
-  m_healIncrease: 1
+  m_healIncrease: 3
   m_durationIncrease: 1
+  m_isActive: 0
 --- !u!1 &8951688405455413221
 GameObject:
   m_ObjectHideFlags: 0

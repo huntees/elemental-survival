@@ -33,6 +33,7 @@ public class PlayerInventory : MonoBehaviour
     [SerializeField] private int m_space = 6;
 
     private bool m_playerHasBoots = false;
+    private Item m_ankhOfReincarnation = null;
 
     public event Action HUD_updateInventory;
     public event Action HUD_updatePlayerGold;
@@ -59,12 +60,6 @@ public class PlayerInventory : MonoBehaviour
 
     public void SellItem(Item item)
     {
-        //If item sold is boots
-        if (item.movementSpeedAmount != 0.0f)
-        {
-            m_playerHasBoots = false;
-        }
-
         m_items.Remove(item);
 
         //remove player stats if there are any
@@ -72,6 +67,17 @@ public class PlayerInventory : MonoBehaviour
         {
             m_playerController.RemoveItemStats(item.movementSpeedAmount, item.attackDamageAmount, item.attackSpeedAmount,
                 item.healthAmount, item.manaAmount, item.manaRegenAmount, item.spellAmplificationAmount);
+        }
+
+        //If item sold is boots 
+        if (item.movementSpeedAmount != 0.0f)
+        {
+            m_playerHasBoots = false;
+        }
+        //If item sold is ankh
+        if (item.itemCode == ItemCode.AnkhOfReincarnation)
+        {
+            m_ankhOfReincarnation = null;
         }
 
         //return 70% item cost
@@ -103,6 +109,15 @@ public class PlayerInventory : MonoBehaviour
             return;
         }
 
+        //Random element adds on purchase, does not need inventory space
+        if (item.itemCode == ItemCode.RandomElement)
+        {
+            TakePlayerGold(item.cost);
+            m_playerController.RandomiseElementForPlayer();
+
+            return;
+        }
+
         //If player does not have enough space
         if (m_items.Count >= m_space)
         {
@@ -120,7 +135,23 @@ public class PlayerInventory : MonoBehaviour
             }
 
             m_playerHasBoots = true;
-        } 
+        }
+
+        //If player already own Ankh
+        if (item.itemCode == ItemCode.AnkhOfReincarnation)
+        {
+            if(m_ankhOfReincarnation != null)
+            {
+                HUD_showInventoryStatusMessage?.Invoke("Already own Ankh Of Reincarnation!");
+                return;
+            }
+
+            m_ankhOfReincarnation = item;
+
+            AddItem(item);
+            TakePlayerGold(item.cost);
+            return ;
+        }
 
         AddItem(Instantiate(item));
         TakePlayerGold(item.cost);
@@ -147,4 +178,16 @@ public class PlayerInventory : MonoBehaviour
     }
 
     #endregion
+
+    public bool UseAnkhOfReincarnation()
+    {
+        if(m_ankhOfReincarnation == null)
+        {
+            return false;
+        }
+
+        ConsumeItem(m_ankhOfReincarnation);
+        m_ankhOfReincarnation = null;
+        return true;
+    }
 }

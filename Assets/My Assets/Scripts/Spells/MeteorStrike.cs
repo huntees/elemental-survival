@@ -2,12 +2,14 @@
 
 public class MeteorStrike : MonoBehaviour
 {
-    [Header("Base Values")]
-    [SerializeField] private float m_damage = 0.0f;
+    //1 strike happens at the start, if duration is 2, total strikes is 3
+
+    [Header("Base Values per Strike")]
+    [SerializeField] private float m_damage = 6.0f;
     [SerializeField] private float m_duration = 1.0f;
 
-    [Header("Increase Per Level")]
-    [SerializeField] private float m_damageIncrease = 5.0f;
+    [Header("Increase Per Level per Strike")]
+    [SerializeField] private float m_damageIncrease = 4.0f;
     [SerializeField] private float m_durationIncrease = 1.0f;
 
     [Header("Misc")]

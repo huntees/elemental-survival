@@ -5,10 +5,10 @@ using UnityEngine;
 public class Geyser : MonoBehaviour
 {
     [Header("Base Values")]
-    [SerializeField] private float m_damage = 5f;
+    [SerializeField] private float m_damage = 15.0f;
 
     [Header("Damage Increase Per Level")]
-    [SerializeField] private float m_damageIncrease = 3f;
+    [SerializeField] private float m_damageIncrease = 10.0f;
 
     private ParticleSystem m_particleSystem;
 
@@ -27,10 +27,11 @@ public class Geyser : MonoBehaviour
         GetComponent<BoxCollider>().enabled = true;
     }
 
-    public void SetValueIncrease(int waterLevel, int earthLevel)
+    public void SetValueIncrease(int waterLevel, int earthLevel, float spellAmp)
     {
         m_damage += m_damageIncrease * waterLevel;
         m_damage += m_damageIncrease * earthLevel;
+        m_damage += m_damage * spellAmp;
     }
 
     void OnTriggerEnter(Collider other)

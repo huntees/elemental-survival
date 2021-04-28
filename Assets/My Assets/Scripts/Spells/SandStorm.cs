@@ -3,11 +3,11 @@
 public class SandStorm : MonoBehaviour
 {
     [Header("Base Values")]
-    [SerializeField] private float m_damage = 1.0f;
-    [SerializeField] private float m_duration = 2.0f;
+    [SerializeField] private float m_damage = 2.0f;
+    [SerializeField] private float m_duration = 4.0f;
 
     [Header("Increase Per Level")]
-    [SerializeField] private float m_damageIncrease = 1.0f;
+    [SerializeField] private float m_damageIncrease = 3.0f;
     [SerializeField] private float m_durationIncrease = 1.0f;
 
     [Header("Misc")]

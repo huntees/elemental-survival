@@ -11,7 +11,7 @@ public class NaturesRejuvenation : MonoBehaviour
     [SerializeField] private float m_duration = 2.0f; 
 
     [Header("Increase Per Level")]
-    [SerializeField] private float m_healIncrease = 1.0f;
+    [SerializeField] private float m_healIncrease = 3.0f;
     [SerializeField] private float m_durationIncrease = 1.0f;
 
     [HideInInspector] public bool m_isActive = false;
@@ -41,12 +41,14 @@ public class NaturesRejuvenation : MonoBehaviour
         }
     }
 
-    public void SetValueIncrease(int waterLevel, int natureLevel)
+    public void SetValueIncrease(int waterLevel, int natureLevel, float spellAmp)
     {
         m_totalHealPerSecond = m_healPerSecond;
         m_totalDuration = m_duration;
 
         m_totalHealPerSecond += m_healIncrease * waterLevel;
+        m_totalHealPerSecond += m_totalHealPerSecond * spellAmp;
+
         m_totalDuration += m_durationIncrease * natureLevel;
     }
 

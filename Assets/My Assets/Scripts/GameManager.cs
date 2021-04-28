@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float m_cooloffPeriod = 60;
     private float m_cooloffTimer = 0;
     [SerializeField] private int m_goldAwardedPerRound = 100;
+    [SerializeField] private int m_roundToGiveElement = 3;
 
     [Header("Spawn Manager")]
     [SerializeField] private int m_enemiesSpawnPerWave = 5;
@@ -21,19 +22,13 @@ public class GameManager : MonoBehaviour
     private int m_enemiesToSpawn = 0;
     private int m_waveCount = 0;
 
-    //Player Stuff
-    private int m_elementCount;
-    private int m_randomElement;
-    
-
     // Start is called before the first frame update
     void Start()
     {
         //Initialisation
         m_playerController = PlayerController.instance;
 
-        // -1 because theres "neutral element"
-        m_elementCount = Elements.GetNames(typeof(Elements)).Length - 1;
+        m_HUDManager.action_skipRestingPeriod += SkipRestingPeriod;
     }
 
     // Update is called once per frame
@@ -44,7 +39,9 @@ public class GameManager : MonoBehaviour
             if(m_cooloffTimer <= 0f)
             {
                 m_HUDManager.UpdateStatusText("");
-                //m_HUDManager.ShowShop(false);
+                m_HUDManager.ShowShop(false);
+                Tooltip.instance.HideTooltip();
+
                 InitiateNextWave();
                 m_cooloffTimer = m_cooloffPeriod;
             }
@@ -52,23 +49,22 @@ public class GameManager : MonoBehaviour
             {
                 m_HUDManager.UpdateStatusText("Next Wave In " + Mathf.Round(m_cooloffTimer) + " Seconds!");
 
+                //During Round End
                 if(!m_HUDManager.m_isShopActive)
                 {
                     m_HUDManager.ShowShop(true);
-
-                    //give player gold on round end
-                    PlayerInventory.instance.GivePlayerGold(m_waveCount * m_goldAwardedPerRound);
+                    OnRoundEnd();
                 }
-                m_cooloffTimer -= 1f * Time.deltaTime;
+
+                m_cooloffTimer -= Time.deltaTime;
             }
         }
         
         //remove on release
         if(Input.GetKeyDown(KeyCode.Equals))
         {
-            RandomiseElementForPlayer();
+            m_playerController.RandomiseElementForPlayer();
         }
-
     }
 
     private void InitiateNextWave()
@@ -78,12 +74,23 @@ public class GameManager : MonoBehaviour
 
         m_enemiesToSpawn += m_enemiesSpawnPerWave + Random.Range(0, m_maxAdditionalEnemy);   
         m_spawnManager.InitiateEnemySpawn(m_enemiesToSpawn);
-
     }
 
-    private void RandomiseElementForPlayer()
+    private void OnRoundEnd()
     {
-        m_randomElement = Random.Range(0, m_elementCount);
-        m_playerController.GiveElement((Elements)m_randomElement);
+        //give player gold on round end
+        PlayerInventory.instance.GivePlayerGold(m_waveCount * m_goldAwardedPerRound);
+
+        //give player a random element on round end every third round
+        if (m_waveCount % m_roundToGiveElement == 0)
+        {
+            m_playerController.RandomiseElementForPlayer();
+        }
     }
+
+    private void SkipRestingPeriod()
+    {
+        m_cooloffTimer = 0.0f;
+    }
+
 }

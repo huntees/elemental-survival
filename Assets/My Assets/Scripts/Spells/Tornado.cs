@@ -3,11 +3,11 @@
 public class Tornado : MonoBehaviour
 {
     [Header("Base Values")]
-    [SerializeField] private float m_damage = 5.0f;
-    [SerializeField] private float m_distance = 0.5f;
+    [SerializeField] private float m_damage = 20.0f;
+    [SerializeField] private float m_distance = 0.3f;
 
     [Header("Damage Increase Per Level")]
-    [SerializeField] private float m_damageIncrease = 2.0f;
+    [SerializeField] private float m_damageIncrease = 10.0f;
     [SerializeField] private float m_distanceIncrease = 0.2f;
 
     [Header("Misc")]

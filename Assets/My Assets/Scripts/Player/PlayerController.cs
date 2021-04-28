@@ -127,9 +127,11 @@ public class PlayerController : MonoBehaviour
     private Vector3 m_mouseRayPosition = new Vector3(0, 0, 0);
     private Vector3 m_mouseRayPositionWithoutY = new Vector3(0, 0, 0);
 
-    [Header ("Effects")]
+    [Header ("Item Effects")]
     [SerializeField] private ParticleSystem m_restoreHealthParticle;
     [SerializeField] private ParticleSystem m_restoreManaParticle;
+    [SerializeField] private ParticleSystem m_shurikenStormParticle;
+    [SerializeField] private GameObject m_lichsSpears;
 
     [Header("Event System")]
     [SerializeField] private EventSystem m_eventSystem;
@@ -155,18 +157,12 @@ public class PlayerController : MonoBehaviour
         //Remove on release
         Application.targetFrameRate = 145;
         GiveElement(Elements.Nature);
-        GiveElement(Elements.Nature);
-        GiveElement(Elements.Nature);
-        GiveElement(Elements.Nature);
-        GiveElement(Elements.Nature);
-        GiveElement(Elements.Nature);
-        GiveElement(Elements.Nature);
         GiveElement(Elements.Fire);
         GiveElement(Elements.Water);
         GiveElement(Elements.Earth);
         GiveElement(Elements.Air);
 
-        PlayerInventory.instance.GivePlayerGold(5000);
+        PlayerInventory.instance.GivePlayerGold(500000);
 
         myTransform = transform;
 
@@ -283,36 +279,40 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(float damage)
     {
         m_animator.SetTrigger("Take Damage");
-        m_playerStats.m_currentHealth -= damage - (damage * m_playerStats.m_damageBlock);
 
+        m_playerStats.m_currentHealth -= damage - (damage * m_playerStats.m_damageBlock);
+        UpdateHealthHUD();
 
         if (m_playerStats.m_currentHealth <= 0)
         {
-            m_animator.SetTrigger("Die");
-        }
+            if(PlayerInventory.instance.UseAnkhOfReincarnation())
+            {
+                m_restoreHealthParticle.Play();
+                m_playerStats.m_currentHealth = 10.0f;
+                UpdateHealthHUD();
 
-        UpdateHealthHUD();
+                return ;
+            }
+
+            m_animator.SetTrigger("Die");
+            //send player died event
+        }
     }
 
     #endregion
 
     #region Spells
 
-    private void SpendMana(float manaCost)
-    {
-        m_playerStats.m_currentMana -= manaCost;
-        UpdateManaHUD();
-    }
-
     private void CastEarthShatter()
     {
-        if (m_earthShatterCooldownTimer <= 0.0f && m_playerStats.HaveEnoughMana(m_earthShatterDetails.manaCost))
+        if (m_earthShatterCooldownTimer <= 0.0f && HasEnoughMana(m_earthShatterDetails.manaCost))
         {
             m_animator.SetTrigger("Projectile Right Attack 01");
             SpendMana(m_earthShatterDetails.manaCost);
 
             var spell = Instantiate(m_earthShatterPrefab, m_projectileBarrel.position + new Vector3(0, -0.7f, 0), m_projectileBarrel.rotation);
-            spell.GetComponentInChildren<EarthShatter>().SetValueIncrease(m_playerStats.m_fireElement.elementLevel, m_playerStats.m_earthElement.elementLevel);
+            spell.GetComponentInChildren<EarthShatter>().SetValueIncrease(m_playerStats.m_fireElement.elementLevel, 
+                m_playerStats.m_earthElement.elementLevel, m_playerStats.m_spellAmp);
 
             m_earthShatterCooldownTimer = m_earthShatterDetails.cooldownDuration;
             UpdateSpellCooldownHUD(m_earthShatterCooldownTimer, m_earthShatterDetails.cooldownDuration);
@@ -321,7 +321,7 @@ public class PlayerController : MonoBehaviour
 
     private void CastSteamBlast()
     {
-        if(!m_playerStats.HaveEnoughMana(m_steamBlastDetails.manaCost))
+        if(!HasEnoughMana(m_steamBlastDetails.manaCost))
         {
             if (m_isSteamBlastPlaying)
             {
@@ -335,7 +335,7 @@ public class PlayerController : MonoBehaviour
         if (!m_isSteamBlastPlaying)
         {
             m_steamBlastComponent.PlaySteamBlast();
-            m_steamBlastComponent.SetValueIncrease(m_playerStats.m_waterElement.elementLevel, m_playerStats.m_fireElement.elementLevel);
+            m_steamBlastComponent.SetValueIncrease(m_playerStats.m_waterElement.elementLevel, m_playerStats.m_fireElement.elementLevel, m_playerStats.m_spellAmp);
             m_isSteamBlastPlaying = true;
         }
 
@@ -344,13 +344,14 @@ public class PlayerController : MonoBehaviour
 
     private void CastGeyser()
     {
-        if (m_geyserCooldownTimer <= 0.0f && m_playerStats.HaveEnoughMana(m_geyserDetails.manaCost))
+        if (m_geyserCooldownTimer <= 0.0f && HasEnoughMana(m_geyserDetails.manaCost))
         {
             m_animator.SetTrigger("Cast Spell");
             SpendMana(m_geyserDetails.manaCost);
 
             var spell = Instantiate(m_geyserPrefab, m_mouseRayPosition + new Vector3(0, 0.1f, 0), Quaternion.identity);
-            spell.GetComponentInChildren<Geyser>().SetValueIncrease(m_playerStats.m_waterElement.elementLevel, m_playerStats.m_earthElement.elementLevel);
+            spell.GetComponentInChildren<Geyser>().SetValueIncrease(m_playerStats.m_waterElement.elementLevel, 
+                m_playerStats.m_earthElement.elementLevel, m_playerStats.m_spellAmp);
 
             m_geyserCooldownTimer = m_geyserDetails.cooldownDuration;
             UpdateSpellCooldownHUD(m_geyserCooldownTimer, m_geyserDetails.cooldownDuration);
@@ -359,13 +360,13 @@ public class PlayerController : MonoBehaviour
 
     private void CastInnerFire()
     {
-        if (m_innerFireCooldownTimer <= 0.0f && !m_innerFireComponent.m_isActive && m_playerStats.HaveEnoughMana(m_innerFireDetails.manaCost))
+        if (m_innerFireCooldownTimer <= 0.0f && !m_innerFireComponent.m_isActive && HasEnoughMana(m_innerFireDetails.manaCost))
         {
             m_animator.SetTrigger("Cast Spell");
             SpendMana(m_innerFireDetails.manaCost);
 
             m_innerFireComponent.Activate();
-            m_innerFireComponent.SetValueIncrease(m_playerStats.m_fireElement.elementLevel, m_playerStats.m_natureElement.elementLevel);
+            m_innerFireComponent.SetValueIncrease(m_playerStats.m_fireElement.elementLevel, m_playerStats.m_natureElement.elementLevel, m_playerStats.m_spellAmp);
             StartCoroutine(InnerFireCountdown(m_innerFireComponent.GetDuration()));
 
             m_innerFireCooldownTimer = m_innerFireDetails.cooldownDuration;
@@ -383,12 +384,12 @@ public class PlayerController : MonoBehaviour
 
     private void CastNaturesRejuvenation()
     {
-        if (m_naturesRejuvenationCooldownTimer <= 0.0f && !m_naturesRejuvenationComponent.m_isActive && m_playerStats.HaveEnoughMana(m_naturesRejuvenationDetails.manaCost))
+        if (m_naturesRejuvenationCooldownTimer <= 0.0f && !m_naturesRejuvenationComponent.m_isActive && HasEnoughMana(m_naturesRejuvenationDetails.manaCost))
         {
             m_animator.SetTrigger("Cast Spell");
             SpendMana(m_naturesRejuvenationDetails.manaCost);
 
-            m_naturesRejuvenationComponent.SetValueIncrease(m_playerStats.m_waterElement.elementLevel, m_playerStats.m_natureElement.elementLevel);
+            m_naturesRejuvenationComponent.SetValueIncrease(m_playerStats.m_waterElement.elementLevel, m_playerStats.m_natureElement.elementLevel, m_playerStats.m_spellAmp);
             m_naturesRejuvenationComponent.Activate();
 
             m_naturesRejuvenationCooldownTimer = m_naturesRejuvenationDetails.cooldownDuration;
@@ -398,13 +399,13 @@ public class PlayerController : MonoBehaviour
 
     private void CastLivingArmor()
     {
-        if (m_livingArmorCooldownTimer <= 0.0f && !m_livingArmorComponent.m_isActive && m_playerStats.HaveEnoughMana(m_livingArmorDetails.manaCost))
+        if (m_livingArmorCooldownTimer <= 0.0f && !m_livingArmorComponent.m_isActive && HasEnoughMana(m_livingArmorDetails.manaCost))
         {
             m_animator.SetTrigger("Cast Spell");
             SpendMana(m_livingArmorDetails.manaCost);
 
             m_livingArmorComponent.Activate();
-            m_livingArmorComponent.SetValueIncrease(m_playerStats.m_earthElement.elementLevel, m_playerStats.m_natureElement.elementLevel);
+            m_livingArmorComponent.SetValueIncrease(m_playerStats.m_earthElement.elementLevel, m_playerStats.m_natureElement.elementLevel, m_playerStats.m_spellAmp);
             StartCoroutine(LivingArmorCountdown(m_livingArmorComponent.GetDuration()));
 
             m_livingArmorCooldownTimer = m_livingArmorDetails.cooldownDuration;
@@ -422,7 +423,7 @@ public class PlayerController : MonoBehaviour
 
     private void CastMeteorStrike()
     {
-        if (m_meteorStrikeCooldownTimer <= 0.0f && m_playerStats.HaveEnoughMana(m_meteorStrikeDetails.manaCost))
+        if (m_meteorStrikeCooldownTimer <= 0.0f && HasEnoughMana(m_meteorStrikeDetails.manaCost))
         {
             m_animator.SetTrigger("Cast Spell");
             SpendMana(m_meteorStrikeDetails.manaCost);
@@ -438,7 +439,7 @@ public class PlayerController : MonoBehaviour
 
     private void CastTornado()
     {
-        if (m_tornadoCooldownTimer <= 0.0f && m_playerStats.HaveEnoughMana(m_tornadoDetails.manaCost))
+        if (m_tornadoCooldownTimer <= 0.0f && HasEnoughMana(m_tornadoDetails.manaCost))
         {
             m_animator.SetTrigger("Projectile Right Attack 01");
             SpendMana(m_tornadoDetails.manaCost);
@@ -454,7 +455,7 @@ public class PlayerController : MonoBehaviour
 
     private void CastSandStorm()
     {
-        if (m_sandStormCooldownTimer <= 0.0f && m_playerStats.HaveEnoughMana(m_sandStormDetails.manaCost))
+        if (m_sandStormCooldownTimer <= 0.0f && HasEnoughMana(m_sandStormDetails.manaCost))
         {
             m_animator.SetTrigger("Cast Spell");
             SpendMana(m_sandStormDetails.manaCost);
@@ -470,13 +471,13 @@ public class PlayerController : MonoBehaviour
 
     private void CastOverCharge()
     {
-        if (m_overchargeCooldownTimer <= 0.0f && !m_overchargeComponent.m_isActive && m_playerStats.HaveEnoughMana(m_overchargeDetails.manaCost))
+        if (m_overchargeCooldownTimer <= 0.0f && !m_overchargeComponent.m_isActive && HasEnoughMana(m_overchargeDetails.manaCost))
         {
             m_animator.SetTrigger("Cast Spell");
             SpendMana(m_overchargeDetails.manaCost);
 
             m_overchargeComponent.Activate();
-            m_overchargeComponent.SetValueIncrease(m_playerStats.m_airElement.elementLevel, m_playerStats.m_natureElement.elementLevel);
+            m_overchargeComponent.SetValueIncrease(m_playerStats.m_airElement.elementLevel, m_playerStats.m_natureElement.elementLevel, m_playerStats.m_spellAmp);
             StartCoroutine(OverchargeCountdown(m_overchargeComponent.GetDuration()));
 
             m_overchargeCooldownTimer = m_overchargeDetails.cooldownDuration;
@@ -774,6 +775,28 @@ public class PlayerController : MonoBehaviour
                 UseForceStaff();
                 break;
 
+            case ItemCode.BlinkDagger:
+                UseBlinkDagger(12.0f);
+                break;
+
+            case ItemCode.EssenceRing:
+                m_restoreHealthParticle.Play();
+                StartCoroutine(UseEssenceRing(100.0f, 10.0f));
+                break;
+
+            case ItemCode.MendersCharm:
+                m_restoreHealthParticle.Play();
+                RestoreHealth(100.0f);
+                break;
+
+            case ItemCode.ShadowsongsShurikens:
+                m_shurikenStormParticle.Play();
+                break;
+
+            case ItemCode.LichsPike:
+                UseLichsSpear();
+                break;
+
             default:
                 break;
         }
@@ -798,6 +821,35 @@ public class PlayerController : MonoBehaviour
         m_rigidbody.velocity = Vector3.zero;
         m_rigidbody.AddForce(GetPlayerDirection() * 10f, ForceMode.Impulse);
         //m_rigidbody.velocity = Vector3.zero;
+    }
+
+    private void UseBlinkDagger(float maxDistance)
+    {
+        Vector3 distance = m_mouseRayPosition - transform.position;
+
+        if (distance.magnitude <= maxDistance)
+        {
+            transform.position = m_mouseRayPosition;
+        }
+        else
+        {
+            transform.Translate((distance.normalized * maxDistance) + Vector3.up * 3.0f, Space.World);
+        }
+
+    }
+
+    IEnumerator UseEssenceRing(float health, float seconds)
+    {
+        m_playerStats.AddHealth(health);
+        UpdateHealthHUD();
+        yield return new WaitForSeconds(seconds);
+        m_playerStats.AddHealth(-health);
+        UpdateHealthHUD();
+    }
+
+    private void UseLichsSpear()
+    {
+        Instantiate(m_lichsSpears, m_projectileBarrel.position, m_projectileBarrel.rotation);
     }
 
     public void ApplyItemStats(float movement, float attackDamage, float attackSpeed, float health, float mana, float manaRegen, float spellAmp)
@@ -872,9 +924,8 @@ public class PlayerController : MonoBehaviour
     private Vector3 GetPlayerDirection()
     {
         direction = (m_mouseRayPositionWithoutY - transform.position).normalized;
-        direction = new Vector3(direction.x, 0, direction.z);
 
-        return direction;
+        return new Vector3(direction.x, 0, direction.z);
     }
 
     private void CalculateAttackTime()
@@ -882,9 +933,25 @@ public class PlayerController : MonoBehaviour
         m_attackTime = (1f - (m_playerStats.m_attackSpeed / (m_playerStats.m_attackSpeed + 100)));
     }
 
+    public void SpendMana(float manaCost)
+    {
+        m_playerStats.m_currentMana -= manaCost;
+        UpdateManaHUD();
+    }
+
+    public bool HasEnoughMana(float amount)
+    {
+        return m_playerStats.m_currentMana >= amount;
+    }
+
     public void GiveElement(Elements element)
     {
         m_playerStats.GiveElement(element);
         UpdateElementTableHUD(element, m_playerStats.GetElementLevel(element));
+    }
+
+    public void RandomiseElementForPlayer()
+    {
+        GiveElement((Elements)UnityEngine.Random.Range(0, Elements.GetNames(typeof(Elements)).Length - 1));
     }
 }

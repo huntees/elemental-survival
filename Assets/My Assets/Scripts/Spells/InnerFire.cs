@@ -6,10 +6,10 @@ public class InnerFire : MonoBehaviour
 
     [Header("Base Values")]
     [SerializeField] private float m_damage = 5.0f;
-    [SerializeField] private float m_duration = 2.0f;
+    [SerializeField] private float m_duration = 3.0f;
 
     [Header("Increase Per Level")]
-    [SerializeField] private float m_damageIncrease = 2.0f;
+    [SerializeField] private float m_damageIncrease = 6.0f;
     [SerializeField] private float m_durationIncrease = 1.0f;
 
     private Transform m_playerTransform;
@@ -37,12 +37,14 @@ public class InnerFire : MonoBehaviour
         }
     }
 
-    public void SetValueIncrease(int fireLevel, int natureLevel)
+    public void SetValueIncrease(int fireLevel, int natureLevel, float spellAmp)
     {
         m_totalDamage = m_damage;
         m_totalDuration = m_duration;
 
         m_totalDamage += m_damageIncrease * fireLevel;
+        m_totalDamage += m_totalDamage * spellAmp;
+
         m_totalDuration += m_durationIncrease * natureLevel;
     }
 

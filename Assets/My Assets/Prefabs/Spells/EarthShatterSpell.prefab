@@ -32949,4 +32949,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab386f845a5c83f42a9f01b157eea660, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_damage: 20
+  m_stunDuration: 0.5
+  m_damageIncrease: 5
+  m_stunDurationIncrease: 1
   m_parentTransform: {fileID: 8446813221179185216}

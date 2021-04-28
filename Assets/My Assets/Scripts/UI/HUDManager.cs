@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class HUDManager : MonoBehaviour
 {
@@ -47,10 +48,11 @@ public class HUDManager : MonoBehaviour
     [SerializeField] private SpellDetails m_sandStormDetails;
     [SerializeField] private SpellDetails m_overchargeDetails;
     
-
     [Header("Shop")]
     [SerializeField] private GameObject m_shopObject;
     [HideInInspector] public bool m_isShopActive = false;
+
+    public event Action action_skipRestingPeriod;
 
     // Start is called before the first frame update
     void Awake()
@@ -78,6 +80,11 @@ public class HUDManager : MonoBehaviour
     {
         m_shopObject.SetActive(show);
         m_isShopActive = show;
+    }
+
+    public void SkipRestingPeriod()
+    {
+        action_skipRestingPeriod?.Invoke();
     }
 
     #region Player Stuff

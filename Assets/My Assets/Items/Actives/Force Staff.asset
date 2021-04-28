@@ -15,9 +15,10 @@ MonoBehaviour:
   name: Force Staff
   itemCode: 101
   icon: {fileID: 21300000, guid: 564cd07026d68d348a1a993cce5a0066, type: 3}
-  cost: 2200
+  cost: 2250
   hasActive: 1
-  cooldownDuration: 1
+  cooldownDuration: 10
+  manaCost: 15
   currentCooldown: 0
   activeDescriptionLine1: Pushes the player a short distance in
   activeDescriptionLine2: the direction it is facing.
@@ -27,7 +28,7 @@ MonoBehaviour:
   movementSpeedAmount: 0
   attackDamageAmount: 0
   attackSpeedAmount: 0
-  healthAmount: 100
-  manaAmount: 100
+  healthAmount: 65
+  manaAmount: 65
   manaRegenAmount: 0
   spellAmplificationAmount: 0

@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08a16f64111e0c64885ca518f86ea16a, type: 3}
+  m_Name: Menders Charm
+  m_EditorClassIdentifier: 
+  name: Mender's Charm
+  itemCode: 104
+  icon: {fileID: 21300000, guid: f16ddf09e530eac4b9db7af43b71df86, type: 3}
+  cost: 2500
+  hasActive: 1
+  cooldownDuration: 55
+  manaCost: 50
+  currentCooldown: 0
+  activeDescriptionLine1: Restores 100 health to the user.
+  activeDescriptionLine2: 
+  isConsumable: 0
+  consumableDescription: 
+  hasStats: 1
+  movementSpeedAmount: 0
+  attackDamageAmount: 0
+  attackSpeedAmount: 0
+  healthAmount: 25
+  manaAmount: 0
+  manaRegenAmount: 0.5
+  spellAmplificationAmount: 0

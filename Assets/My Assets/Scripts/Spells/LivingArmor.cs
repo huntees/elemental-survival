@@ -7,10 +7,10 @@ public class LivingArmor : MonoBehaviour
 
     [Header("Base Values")]
     [SerializeField] private float m_damageBlock = 0.1f;
-    [SerializeField] private float m_duration = 3.0f;
+    [SerializeField] private float m_duration = 4.0f;
 
     [Header("Increase Per Level")]
-    [SerializeField] private float m_damageBlockIncrease = 0.1f;
+    [SerializeField] private float m_damageBlockIncrease = 0.1f; //1.5 reaches 60% block, reaches 50% block on earth level 10
     [SerializeField] private float m_durationIncrease = 1.0f;
 
     [Header("Misc")]
@@ -27,12 +27,14 @@ public class LivingArmor : MonoBehaviour
         m_particleSystem = GetComponent<ParticleSystem>();
     }
 
-    public void SetValueIncrease(int earthLevel, int natureLevel)
+    public void SetValueIncrease(int earthLevel, int natureLevel, float spellAmp)
     {
         m_totalDamageBlock = m_damageBlock;
         m_totalDuration = m_duration;
 
         m_totalDamageBlock += m_damageBlockIncrease * earthLevel;
+        m_totalDamageBlock += m_totalDamageBlock * spellAmp;
+
         m_totalDuration += m_durationIncrease * natureLevel;
 
         m_totalDamageBlock = (m_totalDamageBlock / (m_totalDamageBlock + 1));

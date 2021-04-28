@@ -5,12 +5,12 @@ using UnityEngine;
 public class EarthShatter : MonoBehaviour
 {
     [Header("Base Values")]
-    [SerializeField] private float m_damage = 5f;
-    [SerializeField] private float m_stunDuration = 0f;
+    [SerializeField] private float m_damage = 20f;
+    [SerializeField] private float m_stunDuration = 0.5f;
 
     [Header("Damage Increase Per Level")]
-    [SerializeField] private float m_damageIncrease = 5f;
-    [SerializeField] private float m_stunDurationIncrease = 1f;
+    [SerializeField] private float m_damageIncrease = 8f;
+    [SerializeField] private float m_stunDurationIncrease = 1.0f;
 
     [Header("Misc")]
     [SerializeField] private Transform m_parentTransform;
@@ -33,9 +33,11 @@ public class EarthShatter : MonoBehaviour
 
     }
 
-    public void SetValueIncrease(int fireLevel, int earthLevel)
+    public void SetValueIncrease(int fireLevel, int earthLevel, float spellAmp)
     {
         m_damage += m_damageIncrease * fireLevel;
+        m_damage += m_damage * spellAmp;
+
         m_stunDuration += m_stunDurationIncrease * earthLevel;
     }
 

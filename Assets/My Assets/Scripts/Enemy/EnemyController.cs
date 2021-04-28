@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -14,9 +13,14 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private NavMeshAgent m_agent;
     private Transform m_player;
 
+    [Header("Combat")]
     [SerializeField] private Transform m_attackPoint;
     private float m_nextAttackTime = 0.0f;
     private float m_attackAnimationDelay;
+
+    [SerializeField] private float m_trackingDistance = 20.0f; 
+    private Vector3 m_targetPosition;
+    private float nextUpdateDestinationTime = 0.0f;
 
     [Header("Elemental Damage")]
     [SerializeField] private float m_vulnerableMultiplier = 2.0f;
@@ -38,19 +42,16 @@ public class EnemyController : MonoBehaviour
     private bool m_triggerFallDown = false;
 
     [SerializeField] private GameObject m_cyclonePrefab;
-    private bool m_isRotate = false;
+    private bool m_isRotating = false;
 
     //Event
     private Action<float, Elements> takeElementalDamage;
     public event Action enemyDies;
 
-    //Remove on release
-    [SerializeField] bool m_TempManuallyPlaced = false;
-
-    #region Enable & Disable
+    #region OnEnable 
     private void OnEnable()
     {
-        m_enemyStats.ResetStats();
+        m_enemyStats.ResetHealth();
 
         //Enabling a range of stuff that are disabled when enemy dies
         m_isDead = false;
@@ -58,7 +59,7 @@ public class EnemyController : MonoBehaviour
         m_stunnedParticle.SetActive(false);
         m_triggerFallDown = false;
         m_isPushedUp = false;
-        m_isRotate = false;
+        m_isRotating = false;
 
         m_agent.isStopped = false;
         m_agent.updatePosition = true;
@@ -67,17 +68,12 @@ public class EnemyController : MonoBehaviour
 
         GetComponent<BoxCollider>().enabled = true;
 
-        //Enable following
-        InvokeRepeating("FollowPlayer", 0f, 0.5f);
+        //Set destination upon spawn
+        m_targetPosition = m_player.position;
+        m_agent.SetDestination(m_targetPosition);
 
         m_healthBar.enabled = true;
         UpdateHealthBar(m_enemyStats.m_currentHealth, m_enemyStats.m_maxHealth);
-    }
-
-    //This needs to be done because OnEnable() gets called on Instantiation instead of when its enabled :/
-    private void OnDisable()
-    {
-        CancelInvoke();
     }
 
     #endregion
@@ -87,26 +83,53 @@ public class EnemyController : MonoBehaviour
     {
         m_enemyStats = GetComponent<EnemyStats>();
         m_player = GameObject.Find("Player").transform;
-
-        //remove on release
-        if (m_TempManuallyPlaced)
-        {
-            InvokeRepeating("FollowPlayer", 0f, 0.5f);
-        }
     }
 
     void FixedUpdate()
     {
+        HandleFollowPlayer();
         m_animator.SetFloat("Move Speed", m_agent.velocity.magnitude, 0f, Time.deltaTime);
 
         //For putting enemies back down smoothly
-        if(m_triggerFallDown)
+        HandleFallDown();
+
+        if(m_isRotating)
+        {
+            transform.Rotate(Vector3.up * 10.0f);
+        }
+    }
+
+    #region Handlers
+
+    void HandleFollowPlayer()
+    {
+        if(m_isDead || m_isStunned)
+        {
+            return ;
+        }
+
+        if((m_targetPosition - transform.position).magnitude < m_trackingDistance)
+        {
+            //this updates every half second instead of every frame when distance is less than tracking distance
+            if (Time.time >= nextUpdateDestinationTime)
+            {
+                m_targetPosition = m_player.position;
+                m_agent.SetDestination(m_targetPosition);
+
+                nextUpdateDestinationTime = Time.time + 0.5f;
+            }
+        }
+    }
+
+    void HandleFallDown()
+    {
+        if (m_triggerFallDown)
         {
             if (transform.position.y > m_yPositionBeforePushUp)
             {
                 transform.position -= Vector3.up * 0.2f;
-            } 
-            else 
+            }
+            else
             {
                 m_isPushedUp = false;
 
@@ -119,20 +142,12 @@ public class EnemyController : MonoBehaviour
                 m_agent.updatePosition = true;
                 m_agent.updateRotation = true;
                 m_triggerFallDown = false;
-                m_isRotate = false;
+                m_isRotating = false;
             }
         }
-
-        if(m_isRotate)
-        {
-            transform.Rotate(Vector3.up * 10.0f);
-        }
     }
 
-    void FollowPlayer()
-    {
-        m_agent.SetDestination(m_player.position);
-    }
+    #endregion
 
     // Update is called once per frame
     void Update()
@@ -201,10 +216,9 @@ public class EnemyController : MonoBehaviour
             m_isDead = true;
             GetComponent<BoxCollider>().enabled = false;
             m_stunnedParticle.SetActive(false);
-            m_isRotate = false;
+            m_isRotating = false;
 
             StopAllCoroutines();
-            CancelInvoke();
             m_agent.isStopped = true;
 
 
@@ -412,7 +426,7 @@ public class EnemyController : MonoBehaviour
         Cyclone component = cyclone.GetComponent<Cyclone>();
         component.m_cycloneDuration = duration;
         component.m_enemyController = this;
-        m_isRotate = true;
+        m_isRotating = true;
     }
 
     public void SlowEnemySpeed(float percentage)
@@ -445,5 +459,10 @@ public class EnemyController : MonoBehaviour
 
         m_healthSlider.maxValue = maxHealth;
         m_healthSlider.value = currentHealth;
+    }
+
+    public void IncrementStats(float health, float movementSpeed, float attackDamage)
+    {
+        m_enemyStats.IncrementStats(health, movementSpeed, attackDamage);
     }
 }

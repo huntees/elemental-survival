@@ -14368,7 +14368,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_damageBlock: 0.1
-  m_duration: 3
+  m_duration: 4
   m_damageBlockIncrease: 0.1
   m_durationIncrease: 1
   m_damageBlockCap: 0.6
