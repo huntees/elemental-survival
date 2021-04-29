@@ -21,8 +21,7 @@ MonoBehaviour:
   manaCost: 0
   currentCooldown: 0
   activeDescriptionLine1: Teleport to a target point up to 12 units away.
-  activeDescriptionLine2: 'I trust you to not teleporting to unreachable places :
-    )'
+  activeDescriptionLine2: 'I trust you to not teleport to unreachable places : )'
   isConsumable: 0
   consumableDescription: 
   hasStats: 0
@@ -33,3 +32,4 @@ MonoBehaviour:
   manaAmount: 0
   manaRegenAmount: 0
   spellAmplificationAmount: 0
+  passiveDescriptionLine: 

@@ -108,16 +108,23 @@ public class EnemyController : MonoBehaviour
             return ;
         }
 
-        if((m_targetPosition - transform.position).magnitude < m_trackingDistance)
+        //this updates every half second instead of every frame when distance is less than tracking distance
+        if (Time.time >= nextUpdateDestinationTime)
         {
-            //this updates every half second instead of every frame when distance is less than tracking distance
-            if (Time.time >= nextUpdateDestinationTime)
+            //Follow player if within tracking distance
+            if ((m_player.position - transform.position).magnitude < m_trackingDistance)
             {
                 m_targetPosition = m_player.position;
                 m_agent.SetDestination(m_targetPosition);
-
-                nextUpdateDestinationTime = Time.time + 0.5f;
             }
+            //Go to last known position
+            else if((m_targetPosition - transform.position).magnitude < m_trackingDistance)
+            {
+                m_targetPosition = m_player.position;
+                m_agent.SetDestination(m_targetPosition);
+             }
+
+            nextUpdateDestinationTime = Time.time + 0.5f;
         }
     }
 

@@ -32,3 +32,4 @@ MonoBehaviour:
   manaAmount: 65
   manaRegenAmount: 0
   spellAmplificationAmount: 0
+  passiveDescriptionLine: 

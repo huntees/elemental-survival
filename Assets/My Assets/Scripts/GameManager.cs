@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
             if(m_cooloffTimer <= 0f)
             {
                 m_HUDManager.UpdateStatusText("");
-                m_HUDManager.ShowShop(false);
+                //m_HUDManager.ShowShop(false);
                 Tooltip.instance.HideTooltip();
 
                 InitiateNextWave();

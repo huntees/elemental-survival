@@ -34,8 +34,8 @@ public class SpawnManager : MonoBehaviour
     private GameObject m_instantiatedEnemy;
     private EnemyController m_enemyController;
 
-    public int m_enemiesLeft = 0;
-    public bool m_isSpawning = false;
+    [HideInInspector] public int m_enemiesLeft = 0;
+    [HideInInspector] public bool m_isSpawning = false;
 
     private int m_elementCount;
 

@@ -19,7 +19,7 @@ MonoBehaviour:
   showDamageType: 0
   damageType: 5
   cooldownDuration: 20
-  activeDescriptionLine1: 
-  activeDescriptionLine2: 
+  activeDescriptionLine1: Drawing on the energy of matters, the player
+  activeDescriptionLine2: increases their attack speed for a duration.
   damageScaleInfoLine1: Air increases attack speed
   damageScaleInfoLine2: Nature increases duration
