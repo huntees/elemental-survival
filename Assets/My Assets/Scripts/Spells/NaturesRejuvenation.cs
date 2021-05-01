@@ -14,26 +14,29 @@ public class NaturesRejuvenation : MonoBehaviour
     [SerializeField] private float m_healIncrease = 3.0f;
     [SerializeField] private float m_durationIncrease = 1.0f;
 
-    [HideInInspector] public bool m_isActive = false;
     private float m_nextHealTime = 0.0f;
 
     //needed because it is the same object
     private float m_totalHealPerSecond;
     private float m_totalDuration;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip m_triggerSound;
+    private AudioSource m_audioSource;
+
     void Awake()
     {
         m_particleSystem = GetComponent<ParticleSystem>();
+        m_audioSource = GetComponent<AudioSource>();
+    }
+
+    void Start()
+    {
         m_playerController = GetComponentInParent<PlayerController>();
     }
 
     void Update()
     {
-        if(!m_isActive)
-        {
-            return ;
-        }
-
         if (Time.time >= m_nextHealTime)
         {
             m_playerController.RestoreHealth(m_totalHealPerSecond);
@@ -54,8 +57,10 @@ public class NaturesRejuvenation : MonoBehaviour
 
     public void Activate()
     {
+        gameObject.SetActive(true);
         m_particleSystem.Play();
-        m_isActive = true;
+        m_audioSource.PlayOneShot(m_triggerSound);
+        m_audioSource.Play();
         StartCoroutine(NaturesRejuvenationCountdown(m_totalDuration));
     }
 
@@ -68,6 +73,13 @@ public class NaturesRejuvenation : MonoBehaviour
     public void Deactivate()
     {
         m_particleSystem.Stop();
-        m_isActive = false;
+        m_audioSource.Stop();
+
+        Invoke("DisableObject", 1.0f);
+    }
+
+    private void DisableObject()
+    {
+        gameObject.SetActive(false);
     }
 }

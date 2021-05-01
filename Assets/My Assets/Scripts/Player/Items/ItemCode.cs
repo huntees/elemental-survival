@@ -8,7 +8,7 @@
     GreaterHealthPotion,
     GreaterManaPotion,
     RestorationPotion,
-    AnkhOfReincarnation,
+    AnkhOfImmortality,
     RandomElement,
 
     //Actives

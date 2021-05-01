@@ -20,21 +20,25 @@ public class InnerFire : MonoBehaviour
     private float m_totalDamage;
     private float m_totalDuration;
 
-    [HideInInspector] public bool m_isActive = false;
+    [Header("Audio")]
+    [SerializeField] private AudioClip m_triggerSound;
+    private AudioSource m_audioSource;
 
     // Start is called before the first frame update
+    void Awake()
+    {
+        m_particleSystem = GetComponent<ParticleSystem>();
+        m_audioSource = GetComponent<AudioSource>();
+    }
+
     void Start()
     {
         m_playerTransform = transform.parent;
-        m_particleSystem = GetComponent<ParticleSystem>();
     }
 
     void Update()
     {
-        if (m_isActive)
-        {
-            transform.RotateAround(m_playerTransform.position, m_axis, m_speed * Time.deltaTime);
-        }
+        transform.RotateAround(m_playerTransform.position, m_axis, m_speed * Time.deltaTime);
     }
 
     public void SetValueIncrease(int fireLevel, int natureLevel, float spellAmp)
@@ -50,14 +54,18 @@ public class InnerFire : MonoBehaviour
 
     public void Activate()
     {
+        gameObject.SetActive(true);
         m_particleSystem.Play();
-        m_isActive = true;
+        m_audioSource.PlayOneShot(m_triggerSound);
+        m_audioSource.Play();
     }
 
     public void Deactivate()
     {
         m_particleSystem.Stop();
-        m_isActive = false;
+        m_audioSource.Stop();
+
+        Invoke("DisableObject", 1.0f);
     }
 
     public float GetDamageAmount()
@@ -68,5 +76,10 @@ public class InnerFire : MonoBehaviour
     public float GetDuration()
     {
         return m_totalDuration;
+    }
+
+    private void DisableObject()
+    {
+        gameObject.SetActive(false);
     }
 }

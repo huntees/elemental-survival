@@ -4,6 +4,8 @@ using UnityEngine;
 public class LivingArmor : MonoBehaviour
 {
     private ParticleSystem m_particleSystem;
+    private ParticleSystem.MainModule m_particleMain;
+    private ParticleSystem.MainModule m_particleMain2;
 
     [Header("Base Values")]
     [SerializeField] private float m_damageBlock = 0.1f;
@@ -16,15 +18,21 @@ public class LivingArmor : MonoBehaviour
     [Header("Misc")]
     [SerializeField] private float m_damageBlockCap = 0.6f;
 
-    [HideInInspector] public bool m_isActive = false;
-
     //needed because it is the same object
     private float m_totalDamageBlock;
     private float m_totalDuration;
 
+    [Header ("Audio")]
+    [SerializeField] private AudioClip m_triggerSound;
+    private AudioSource m_audioSource;
+
     void Awake()
     {
         m_particleSystem = GetComponent<ParticleSystem>();
+        m_particleMain = m_particleSystem.main;
+        m_particleMain2 = transform.GetChild(2).GetComponent<ParticleSystem>().main;
+
+        m_audioSource = GetComponent<AudioSource>();
     }
 
     public void SetValueIncrease(int earthLevel, int natureLevel, float spellAmp)
@@ -47,14 +55,22 @@ public class LivingArmor : MonoBehaviour
 
     public void Activate()
     {
+        gameObject.SetActive(true);
+        m_particleMain.simulationSpeed = 0.3f;
+        m_particleMain2.simulationSpeed = 0.2f;
         m_particleSystem.Play();
-        m_isActive = true;
+        m_audioSource.PlayOneShot(m_triggerSound);
+        m_audioSource.Play();
     }
 
     public void Deactivate()
     {
+        m_particleMain.simulationSpeed = 1.0f;
+        m_particleMain2.simulationSpeed = 1.0f;
         m_particleSystem.Stop();
-        m_isActive = false;
+        m_audioSource.Stop();
+
+        Invoke("DisableObject", 1.0f);
     }
 
     public float GetDamageBlockAmount()
@@ -65,5 +81,10 @@ public class LivingArmor : MonoBehaviour
     public float GetDuration()
     {
         return m_totalDuration;
+    }
+
+    private void DisableObject()
+    {
+        gameObject.SetActive(false);
     }
 }

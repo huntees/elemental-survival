@@ -133,18 +133,34 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private ParticleSystem m_shurikenStormParticle;
     [SerializeField] private GameObject m_lichsSpears;
 
-    [Header("Event System")]
-    [SerializeField] private EventSystem m_eventSystem;
+    [Header("Audio")]
+    [SerializeField] private AudioClip m_drinkPotionSound;
+    [SerializeField] private AudioClip m_blinkDaggerSound;
+    [SerializeField] private AudioClip m_forceStaffSound;
+    [SerializeField] private AudioClip m_essenceRingSound;
+    [SerializeField] private AudioClip m_mendersCharmSound;
+    [SerializeField] private AudioClip m_shadowsongsShurikenSound;
+    [SerializeField] private AudioClip m_ankhOfImmortalitySound;
 
+    [SerializeField] private AudioClip m_takeDamageSound;
+    [SerializeField] private AudioClip m_switchElementSound;
+
+    private AudioSource m_audioSource;
+
+    private EventSystem m_eventSystem;
+    
     private void Initialisation()
     {
+
         //Initialisation
+        m_eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
+
         m_playerStats = GetComponent<PlayerStats>();
         m_rigidbody = GetComponent<Rigidbody>();
         m_animator = GetComponent<Animator>();
+        m_audioSource = GetComponent<AudioSource>();
 
         m_steamBlastComponent = m_steamBlastObject.gameObject.GetComponent<SteamBlast>();
-
         m_innerFireComponent = m_innerFireObject.gameObject.GetComponent<InnerFire>();
         m_naturesRejuvenationComponent = m_naturesRejuvenationObject.gameObject.GetComponent<NaturesRejuvenation>();
         m_livingArmorComponent = m_livingArmorObject.gameObject.GetComponent<LivingArmor>();
@@ -157,9 +173,22 @@ public class PlayerController : MonoBehaviour
         //Remove on release
         Application.targetFrameRate = 145;
         GiveElement(Elements.Nature);
+        GiveElement(Elements.Nature);
+        GiveElement(Elements.Nature);
+        GiveElement(Elements.Nature);
+        GiveElement(Elements.Nature);
+        GiveElement(Elements.Nature);
+        GiveElement(Elements.Nature);
         GiveElement(Elements.Fire);
         GiveElement(Elements.Water);
         GiveElement(Elements.Earth);
+        GiveElement(Elements.Air);
+        GiveElement(Elements.Air);
+        GiveElement(Elements.Air);
+        GiveElement(Elements.Air);
+        GiveElement(Elements.Air);
+        GiveElement(Elements.Air);
+        GiveElement(Elements.Air);
         GiveElement(Elements.Air);
 
         PlayerInventory.instance.GivePlayerGold(500000);
@@ -278,6 +307,7 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
+        m_audioSource.PlayOneShot(m_takeDamageSound);
         m_animator.SetTrigger("Take Damage");
 
         m_playerStats.m_currentHealth -= damage - (damage * m_playerStats.m_damageBlock);
@@ -287,6 +317,7 @@ public class PlayerController : MonoBehaviour
         {
             if(PlayerInventory.instance.UseAnkhOfReincarnation())
             {
+                m_audioSource.PlayOneShot(m_ankhOfImmortalitySound);
                 m_restoreHealthParticle.Play();
                 m_playerStats.m_currentHealth = 10.0f;
                 UpdateHealthHUD();
@@ -360,7 +391,7 @@ public class PlayerController : MonoBehaviour
 
     private void CastInnerFire()
     {
-        if (m_innerFireCooldownTimer <= 0.0f && !m_innerFireComponent.m_isActive && HasEnoughMana(m_innerFireDetails.manaCost))
+        if (m_innerFireCooldownTimer <= 0.0f && !m_innerFireComponent.isActiveAndEnabled && HasEnoughMana(m_innerFireDetails.manaCost))
         {
             m_animator.SetTrigger("Cast Spell");
             SpendMana(m_innerFireDetails.manaCost);
@@ -384,7 +415,7 @@ public class PlayerController : MonoBehaviour
 
     private void CastNaturesRejuvenation()
     {
-        if (m_naturesRejuvenationCooldownTimer <= 0.0f && !m_naturesRejuvenationComponent.m_isActive && HasEnoughMana(m_naturesRejuvenationDetails.manaCost))
+        if (m_naturesRejuvenationCooldownTimer <= 0.0f && !m_naturesRejuvenationComponent.isActiveAndEnabled && HasEnoughMana(m_naturesRejuvenationDetails.manaCost))
         {
             m_animator.SetTrigger("Cast Spell");
             SpendMana(m_naturesRejuvenationDetails.manaCost);
@@ -399,7 +430,7 @@ public class PlayerController : MonoBehaviour
 
     private void CastLivingArmor()
     {
-        if (m_livingArmorCooldownTimer <= 0.0f && !m_livingArmorComponent.m_isActive && HasEnoughMana(m_livingArmorDetails.manaCost))
+        if (m_livingArmorCooldownTimer <= 0.0f && !m_livingArmorComponent.isActiveAndEnabled && HasEnoughMana(m_livingArmorDetails.manaCost))
         {
             m_animator.SetTrigger("Cast Spell");
             SpendMana(m_livingArmorDetails.manaCost);
@@ -471,7 +502,7 @@ public class PlayerController : MonoBehaviour
 
     private void CastOverCharge()
     {
-        if (m_overchargeCooldownTimer <= 0.0f && !m_overchargeComponent.m_isActive && HasEnoughMana(m_overchargeDetails.manaCost))
+        if (m_overchargeCooldownTimer <= 0.0f && !m_overchargeComponent.isActiveAndEnabled && HasEnoughMana(m_overchargeDetails.manaCost))
         {
             m_animator.SetTrigger("Cast Spell");
             SpendMana(m_overchargeDetails.manaCost);
@@ -640,6 +671,8 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+        m_audioSource.PlayOneShot(m_switchElementSound);
+
         switch (m_playerStats.m_primaryElement.elementType)
         {
             case Elements.Fire:
@@ -745,26 +778,31 @@ public class PlayerController : MonoBehaviour
         {
             //Consumables
             case ItemCode.HealthPotion:
+                m_audioSource.PlayOneShot(m_drinkPotionSound);
                 m_restoreHealthParticle.Play();
                 RestoreHealth(50.0f);
                 break;
 
             case ItemCode.ManaPotion:
+                m_audioSource.PlayOneShot(m_drinkPotionSound);
                 m_restoreManaParticle.Play();
                 RestoreMana(50.0f);
                 break;
 
             case ItemCode.GreaterHealthPotion:
+                m_audioSource.PlayOneShot(m_drinkPotionSound);
                 m_restoreHealthParticle.Play();
                 RestoreHealth(100.0f);
                 break;
 
             case ItemCode.GreaterManaPotion:
+                m_audioSource.PlayOneShot(m_drinkPotionSound);
                 m_restoreManaParticle.Play();
                 RestoreMana(100.0f);
                 break;
 
             case ItemCode.RestorationPotion:
+                m_audioSource.PlayOneShot(m_drinkPotionSound);
                 m_restoreHealthParticle.Play();
                 m_restoreManaParticle.Play();
                 RestoreHealth(200.0f);
@@ -772,24 +810,29 @@ public class PlayerController : MonoBehaviour
                 break;
 
             case ItemCode.ForceStaff:
+                m_audioSource.PlayOneShot(m_forceStaffSound);
                 UseForceStaff();
                 break;
 
             case ItemCode.BlinkDagger:
+                m_audioSource.PlayOneShot(m_blinkDaggerSound);
                 UseBlinkDagger(12.0f);
                 break;
 
             case ItemCode.EssenceRing:
+                m_audioSource.PlayOneShot(m_essenceRingSound);
                 m_restoreHealthParticle.Play();
                 StartCoroutine(UseEssenceRing(100.0f, 10.0f));
                 break;
 
             case ItemCode.MendersCharm:
+                m_audioSource.PlayOneShot(m_mendersCharmSound);
                 m_restoreHealthParticle.Play();
                 RestoreHealth(100.0f);
                 break;
 
             case ItemCode.ShadowsongsShurikens:
+                m_audioSource.PlayOneShot(m_shadowsongsShurikenSound);
                 m_shurikenStormParticle.Play();
                 break;
 
@@ -819,7 +862,7 @@ public class PlayerController : MonoBehaviour
     private void UseForceStaff()
     {
         m_rigidbody.velocity = Vector3.zero;
-        m_rigidbody.AddForce(GetPlayerDirection() * 10f, ForceMode.Impulse);
+        m_rigidbody.AddForce(GetPlayerDirection() * 15f, ForceMode.Impulse);
         //m_rigidbody.velocity = Vector3.zero;
     }
 

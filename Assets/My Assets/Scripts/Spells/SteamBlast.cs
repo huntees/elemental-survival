@@ -18,8 +18,13 @@ public class SteamBlast : MonoBehaviour
     private float m_totalDamage;
     private float m_totalPushBackForce;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip m_triggerSound;
+    private AudioSource m_audioSource;
+
     private void Awake()
     {
+        m_audioSource = GetComponent<AudioSource>();
         m_particleSystem = GetComponent<ParticleSystem>();
     }
 
@@ -46,10 +51,13 @@ public class SteamBlast : MonoBehaviour
     public void PlaySteamBlast()
     {
         m_particleSystem.Play();
+        m_audioSource.PlayOneShot(m_triggerSound);
+        m_audioSource.Play();
     }
 
     public void StopSteamBlast()
     {
         m_particleSystem.Stop();
+        m_audioSource.Stop();
     }
 }

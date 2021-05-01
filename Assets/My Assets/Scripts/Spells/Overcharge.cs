@@ -12,15 +12,18 @@ public class Overcharge : MonoBehaviour
     [SerializeField] private float m_attackSpeedIncrease = 5.0f;
     [SerializeField] private float m_durationIncrease = 1.0f;
 
-    [HideInInspector] public bool m_isActive = false;
-
     //needed because it is the same object
     private float m_totalAttackSpeed;
     private float m_totalDuration;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip m_triggerSound;
+    private AudioSource m_audioSource;
+
     void Awake()
     {
         m_particleSystem = GetComponent<ParticleSystem>();
+        m_audioSource = GetComponent<AudioSource>();
     }
 
     public void SetValueIncrease(int airLevel, int natureLevel, float spellAmp)
@@ -36,14 +39,18 @@ public class Overcharge : MonoBehaviour
 
     public void Activate()
     {
+        gameObject.SetActive(true);
         m_particleSystem.Play();
-        m_isActive = true;
+        m_audioSource.PlayOneShot(m_triggerSound);
+        m_audioSource.Play();
     }
 
     public void Deactivate()
     {
         m_particleSystem.Stop();
-        m_isActive = false;
+        m_audioSource.Stop();
+
+        Invoke("DisableObject", 1.0f);
     }
 
     public float GetAttackSpeedAmount()
@@ -54,5 +61,10 @@ public class Overcharge : MonoBehaviour
     public float GetDuration()
     {
         return m_totalDuration;
+    }
+
+    private void DisableObject()
+    {
+        gameObject.SetActive(false);
     }
 }

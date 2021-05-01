@@ -4976,6 +4976,9 @@ MonoBehaviour:
   m_natureGolemMaterial: {fileID: 2100000, guid: 704b1f087972ca14ca6a0979bbaf79bf,
     type: 2}
   m_airGolemMaterial: {fileID: 2100000, guid: 64b02bc726d54cf49a8c011a9af88dc5, type: 2}
+  m_defaultMaxHealth: 40
+  m_defaultMovementSpeed: 2
+  m_defaultAttackDamage: 12
   m_maxHealth: 40
   m_currentHealth: 0
   m_movementSpeed: 2
@@ -5007,7 +5010,6 @@ MonoBehaviour:
   m_stunnedParticle: {fileID: 5036202361917855064}
   m_cyclonePrefab: {fileID: 1081221806559707322, guid: 1cf0b363b125a3043932ab826b9f9b56,
     type: 3}
-  m_TempManuallyPlaced: 0
 --- !u!1 &1884620628856453888
 GameObject:
   m_ObjectHideFlags: 0
