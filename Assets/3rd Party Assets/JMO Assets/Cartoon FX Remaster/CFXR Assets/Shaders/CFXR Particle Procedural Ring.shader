@@ -521,7 +521,5 @@ Shader "Cartoon FX/Remaster/Particle Procedural Ring"
 			}
 		}
 	}
-	
-	CustomEditor "CartoonFX.MaterialInspector"
 }
 

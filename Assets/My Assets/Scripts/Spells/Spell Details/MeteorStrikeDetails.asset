@@ -15,10 +15,10 @@ MonoBehaviour:
   name: Meteor Strike
   spellCode: 7
   icon: {fileID: 21300000, guid: 929b2d07f5af9f34090a95c856c31cb6, type: 3}
-  manaCost: 25
+  manaCost: 50
   showDamageType: 1
   damageType: 0
-  cooldownDuration: 15
+  cooldownDuration: 18
   activeDescriptionLine1: Calls down waves of meteors that damage
   activeDescriptionLine2: enemies in the target area for a duration.
   damageScaleInfoLine1: Fire increases damage

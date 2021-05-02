@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.EventSystems;
@@ -50,6 +49,7 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 direction;
 
+    #region Spell References
     [Header("Spells")]
     //Earth Shatter
     [SerializeField] private GameObject m_earthShatterPrefab;
@@ -106,10 +106,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private SpellDetails m_overchargeDetails;
     private float m_overchargeCooldownTimer = 0.0f;
 
+    #endregion
+
     private SpellCode m_activeSpell = SpellCode.None;
     private Action CastSpell;
     private float m_nextManaRegenTime = 0.0f;
-
 
     //Update HUD 
     public event Action<float, float> HUD_updateHP;
@@ -119,8 +120,6 @@ public class PlayerController : MonoBehaviour
     public event Action<Elements, int> HUD_updateElementTable;
     public event Action<SpellCode> HUD_updateSpell;
     public event Action<float, float> HUD_updateSpellCooldown;
-
-    private Transform myTransform;
 
     private Ray m_mouseRay;
     private RaycastHit m_mouseRayHit;
@@ -144,15 +143,18 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private AudioClip m_takeDamageSound;
     [SerializeField] private AudioClip m_switchElementSound;
+    [SerializeField] private AudioClip m_noManaSound;
 
     private AudioSource m_audioSource;
 
     private EventSystem m_eventSystem;
+
+    public event Action triggerGameOver;
+    private bool m_isDead = false;
     
     private void Initialisation()
     {
-
-        //Initialisation
+        //Initialisations
         m_eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
 
         m_playerStats = GetComponent<PlayerStats>();
@@ -173,27 +175,11 @@ public class PlayerController : MonoBehaviour
         //Remove on release
         Application.targetFrameRate = 145;
         GiveElement(Elements.Nature);
-        GiveElement(Elements.Nature);
-        GiveElement(Elements.Nature);
-        GiveElement(Elements.Nature);
-        GiveElement(Elements.Nature);
-        GiveElement(Elements.Nature);
-        GiveElement(Elements.Nature);
         GiveElement(Elements.Fire);
         GiveElement(Elements.Water);
         GiveElement(Elements.Earth);
         GiveElement(Elements.Air);
-        GiveElement(Elements.Air);
-        GiveElement(Elements.Air);
-        GiveElement(Elements.Air);
-        GiveElement(Elements.Air);
-        GiveElement(Elements.Air);
-        GiveElement(Elements.Air);
-        GiveElement(Elements.Air);
-
         PlayerInventory.instance.GivePlayerGold(500000);
-
-        myTransform = transform;
 
         CalculateAttackTime();
 
@@ -204,21 +190,34 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (m_isDead)
+        {
+            //To stop flying behvaiour after death
+            transform.LookAt(m_mouseRayPositionWithoutY);
+            transform.rotation = Quaternion.Euler(0f, transform.eulerAngles.y, 0f);  //Stops x and z rotation to keep upright
+
+            return;
+        }
+
         //Movement 
         m_Move = (Input.GetAxisRaw("Vertical") * Vector3.forward + Input.GetAxisRaw("Horizontal") * Vector3.right).normalized;
 
         m_animator.SetFloat("Move Speed", m_Move.magnitude, 0f, Time.deltaTime);
 
-        m_rigidbody.MovePosition(myTransform.position + m_Move * m_playerStats.m_movementSpeed * Time.deltaTime);
+        m_rigidbody.MovePosition(transform.position + m_Move * m_playerStats.m_movementSpeed * Time.deltaTime);
 
         //Look at mouse cursor
-        myTransform.LookAt(m_mouseRayPositionWithoutY);
-        myTransform.rotation = Quaternion.Euler(0f, myTransform.eulerAngles.y, 0f);  //Stops x and z rotation to keep upright
-
+        transform.LookAt(m_mouseRayPositionWithoutY);
+        transform.rotation = Quaternion.Euler(0f, transform.eulerAngles.y, 0f);  //Stops x and z rotation to keep upright
     }
 
     void Update()
     {
+        if (m_isDead)
+        {
+            return;
+        }
+
         GetCursorPosition();
 
         SwitchElementListener();
@@ -307,6 +306,11 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
+        if(m_isDead)
+        {
+            return ;
+        }
+
         m_audioSource.PlayOneShot(m_takeDamageSound);
         m_animator.SetTrigger("Take Damage");
 
@@ -327,6 +331,8 @@ public class PlayerController : MonoBehaviour
 
             m_animator.SetTrigger("Die");
             //send player died event
+            m_isDead = true;
+            triggerGameOver?.Invoke();
         }
     }
 
@@ -352,7 +358,7 @@ public class PlayerController : MonoBehaviour
 
     private void CastSteamBlast()
     {
-        if(!HasEnoughMana(m_steamBlastDetails.manaCost))
+        if(!HasEnoughManaNoSound(m_steamBlastDetails.manaCost))
         {
             if (m_isSteamBlastPlaying)
             {
@@ -868,15 +874,15 @@ public class PlayerController : MonoBehaviour
 
     private void UseBlinkDagger(float maxDistance)
     {
-        Vector3 distance = m_mouseRayPosition - transform.position;
+        Vector3 distance = m_mouseRayPosition - base.transform.position;
 
         if (distance.magnitude <= maxDistance)
         {
-            transform.position = m_mouseRayPosition;
+            base.transform.position = m_mouseRayPosition;
         }
         else
         {
-            transform.Translate((distance.normalized * maxDistance) + Vector3.up * 3.0f, Space.World);
+            base.transform.Translate((distance.normalized * maxDistance) + Vector3.up * 3.0f, Space.World);
         }
 
     }
@@ -966,7 +972,7 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 GetPlayerDirection()
     {
-        direction = (m_mouseRayPositionWithoutY - transform.position).normalized;
+        direction = (m_mouseRayPositionWithoutY - base.transform.position).normalized;
 
         return new Vector3(direction.x, 0, direction.z);
     }
@@ -983,6 +989,17 @@ public class PlayerController : MonoBehaviour
     }
 
     public bool HasEnoughMana(float amount)
+    {
+        if(m_playerStats.m_currentMana < amount)
+        {
+            m_audioSource.PlayOneShot(m_noManaSound);
+            return false;
+        }
+
+        return true;
+    }
+
+    public bool HasEnoughManaNoSound(float amount)
     {
         return m_playerStats.m_currentMana >= amount;
     }

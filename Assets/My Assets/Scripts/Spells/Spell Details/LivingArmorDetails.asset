@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Living Armor
   spellCode: 6
   icon: {fileID: 21300000, guid: 47f6265f05e1af5408a668b13f17e763, type: 3}
-  manaCost: 25
+  manaCost: 30
   showDamageType: 0
   damageType: 5
   cooldownDuration: 30

@@ -8,9 +8,8 @@ public class EnemyController : MonoBehaviour
 {
     private EnemyStats m_enemyStats;
 
-    [Header("Components")]
-    [SerializeField] private Animator m_animator;
-    [SerializeField] private NavMeshAgent m_agent;
+    private Animator m_animator;
+    private NavMeshAgent m_agent;
     private Transform m_player;
 
     [Header("Combat")]
@@ -20,7 +19,7 @@ public class EnemyController : MonoBehaviour
 
     [SerializeField] private float m_trackingDistance = 20.0f; 
     private Vector3 m_targetPosition;
-    private float nextUpdateDestinationTime = 0.0f;
+    private float m_nextUpdateDestinationTime = 0.0f;
 
     [Header("Elemental Damage")]
     [SerializeField] private float m_vulnerableMultiplier = 2.0f;
@@ -82,6 +81,9 @@ public class EnemyController : MonoBehaviour
     void Awake()
     {
         m_enemyStats = GetComponent<EnemyStats>();
+        m_animator = GetComponent<Animator>();
+        m_agent = GetComponent<NavMeshAgent>();
+        
         m_player = GameObject.Find("Player").transform;
     }
 
@@ -109,7 +111,7 @@ public class EnemyController : MonoBehaviour
         }
 
         //this updates every half second instead of every frame when distance is less than tracking distance
-        if (Time.time >= nextUpdateDestinationTime)
+        if (Time.time >= m_nextUpdateDestinationTime)
         {
             //Follow player if within tracking distance
             if ((m_player.position - transform.position).magnitude < m_trackingDistance)
@@ -124,7 +126,7 @@ public class EnemyController : MonoBehaviour
                 m_agent.SetDestination(m_targetPosition);
              }
 
-            nextUpdateDestinationTime = Time.time + 0.5f;
+            m_nextUpdateDestinationTime = Time.time + 0.5f;
         }
     }
 

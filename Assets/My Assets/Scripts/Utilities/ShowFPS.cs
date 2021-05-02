@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
 
+//Simple FPS script from Unity Docs for dev purposes only.
 public class ShowFPS : MonoBehaviour
 {
 	float deltaTime = 0.0f;

@@ -1,13 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+
     [Header("Component References")]
     [SerializeField] private SpawnManager m_spawnManager;
     [SerializeField] private HUDManager m_HUDManager;
+    [SerializeField] private PauseMenu m_pauseMenu;
     private PlayerController m_playerController;
+    private AudioSource m_audioSource;
 
     [Header("Properties")]
     [SerializeField] private float m_cooloffPeriod = 60;
@@ -27,6 +28,8 @@ public class GameManager : MonoBehaviour
     {
         //Initialisation
         m_playerController = PlayerController.instance;
+        m_audioSource = GetComponent<AudioSource>();
+        m_playerController.triggerGameOver += TriggerGameOver;
 
         m_HUDManager.action_skipRestingPeriod += SkipRestingPeriod;
     }
@@ -39,7 +42,7 @@ public class GameManager : MonoBehaviour
             if(m_cooloffTimer <= 0f)
             {
                 m_HUDManager.UpdateStatusText("");
-                //m_HUDManager.ShowShop(false);
+                m_HUDManager.ShowShop(false);
                 Tooltip.instance.HideTooltip();
 
                 InitiateNextWave();
@@ -53,6 +56,7 @@ public class GameManager : MonoBehaviour
                 if(!m_HUDManager.m_isShopActive)
                 {
                     m_HUDManager.ShowShop(true);
+                    m_audioSource.Play();
                     OnRoundEnd();
                 }
 
@@ -60,10 +64,9 @@ public class GameManager : MonoBehaviour
             }
         }
         
-        //remove on release
-        if(Input.GetKeyDown(KeyCode.Equals))
+        if(Input.GetKeyDown(KeyCode.Escape))
         {
-            m_playerController.RandomiseElementForPlayer();
+            m_pauseMenu.TogglePauseMenu();
         }
     }
 
@@ -91,6 +94,11 @@ public class GameManager : MonoBehaviour
     private void SkipRestingPeriod()
     {
         m_cooloffTimer = 0.0f;
+    }
+
+    private void TriggerGameOver()
+    {
+        m_pauseMenu.TriggerGameOver();
     }
 
 }

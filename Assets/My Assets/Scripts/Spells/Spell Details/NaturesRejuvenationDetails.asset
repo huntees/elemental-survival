@@ -15,10 +15,10 @@ MonoBehaviour:
   name: Nature's Rejuvenation
   spellCode: 5
   icon: {fileID: 21300000, guid: 1b784f1e171c6f146b78cb27e6f430b6, type: 3}
-  manaCost: 25
+  manaCost: 40
   showDamageType: 0
   damageType: 3
-  cooldownDuration: 20
+  cooldownDuration: 30
   activeDescriptionLine1: 'Attract a cloud of butterflies which heal the '
   activeDescriptionLine2: player every second for a duration.
   damageScaleInfoLine1: Water increases heal amount

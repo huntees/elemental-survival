@@ -44877,7 +44877,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bab42cbeacaa84a4eac8594b6f3600d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_movementSpeed: 3
+  m_movementSpeed: 32
   m_attackDamage: 0
   m_attackSpeed: 0
   m_maxHealth: 100
@@ -44958,6 +44958,7 @@ MonoBehaviour:
   m_takeDamageSound: {fileID: 8300000, guid: 839b825cef3023c49b80915e4f7f80da, type: 3}
   m_switchElementSound: {fileID: 8300000, guid: 06a5226062ce61d4cbd4d446310004ee,
     type: 3}
+  m_noManaSound: {fileID: 8300000, guid: 5fc8de9406178e34591e26b5e27c8bc1, type: 3}
 --- !u!114 &1560270491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54842,6 +54843,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Overcharge
       objectReference: {fileID: 0}
+    - target: {fileID: 2321431204844330279, guid: 1160ab1aedd63ba41a8fd487626c963d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3463783608997744151, guid: 1160ab1aedd63ba41a8fd487626c963d,
         type: 3}
       propertyPath: playOnAwake
@@ -54988,6 +54994,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4317689187814158639, guid: c5b0310c5c9991c4f9c5494fb9c003d5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4965158614323104159, guid: c5b0310c5c9991c4f9c5494fb9c003d5,
         type: 3}
@@ -55160,6 +55171,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 8951688405455413105, guid: 27d7e8d2a2e934f4e8c3d750e428bd0e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8951688405455413221, guid: 27d7e8d2a2e934f4e8c3d750e428bd0e,
         type: 3}
       propertyPath: m_Layer
@@ -55200,6 +55216,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: LivingArmor
+      objectReference: {fileID: 0}
+    - target: {fileID: 1279926720857475858, guid: e4476ae605434144387ca8871be0805e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1279926720857475870, guid: e4476ae605434144387ca8871be0805e,
         type: 3}

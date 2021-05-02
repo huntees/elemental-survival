@@ -419,7 +419,5 @@ Shader "Cartoon FX/Remaster/Particle Procedural Glow"
 			}
 		}
 	}
-	
-	CustomEditor "CartoonFX.MaterialInspector"
 }
 

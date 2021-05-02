@@ -15,10 +15,10 @@ MonoBehaviour:
   name: Earth Shatter
   spellCode: 1
   icon: {fileID: 21300000, guid: 2c77ea7fa5dffe34da0560073e24fd81, type: 3}
-  manaCost: 20
+  manaCost: 40
   showDamageType: 1
   damageType: 0
-  cooldownDuration: 5
+  cooldownDuration: 8
   activeDescriptionLine1: Creates a ridge of fiery stone stunning and
   activeDescriptionLine2: damaging enemies along its line.
   damageScaleInfoLine1: Fire increases damage

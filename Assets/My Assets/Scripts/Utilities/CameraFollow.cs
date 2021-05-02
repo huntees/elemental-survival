@@ -9,19 +9,9 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] float smoothSpeed = 10f;
     [SerializeField] Vector3 offset = new Vector3(0, 6, -8);
 
-    private Transform myTransform;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        myTransform = transform;
-    }
-
     // Update is called once per frame
     void FixedUpdate()
     {
-        myTransform.position = Vector3.Lerp(myTransform.position, target.position + offset, smoothSpeed * Time.deltaTime);
-
-        //myTransform.LookAt(target);
+        transform.position = Vector3.Lerp(transform.position, target.position + offset, smoothSpeed * Time.deltaTime);
     }
 }

@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+//Only uses for enemy health bar
 public class FreezeRotation : MonoBehaviour
 {
     private Quaternion m_rotation;

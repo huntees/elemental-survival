@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Tornado
   spellCode: 8
   icon: {fileID: 21300000, guid: 7a5be357ad9005a4e9ea3e3111b98600, type: 3}
-  manaCost: 25
+  manaCost: 30
   showDamageType: 1
   damageType: 4
   cooldownDuration: 15
