@@ -15,9 +15,10 @@ MonoBehaviour:
   name: Blades of Attack
   itemCode: 0
   icon: {fileID: 21300000, guid: 75a84b755b0527543b1f223371098428, type: 3}
-  cost: 500
+  cost: 700
   hasActive: 0
   cooldownDuration: 0
+  manaCost: 0
   currentCooldown: 0
   activeDescriptionLine1: 
   activeDescriptionLine2: 
@@ -25,9 +26,10 @@ MonoBehaviour:
   consumableDescription: 
   hasStats: 1
   movementSpeedAmount: 0
-  attackDamageAmount: 10
+  attackDamageAmount: 8
   attackSpeedAmount: 0
   healthAmount: 0
   manaAmount: 0
   manaRegenAmount: 0
   spellAmplificationAmount: 0
+  passiveDescriptionLine: 

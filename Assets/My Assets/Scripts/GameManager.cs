@@ -14,13 +14,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float m_cooloffPeriod = 60;
     private float m_cooloffTimer = 0;
     [SerializeField] private int m_goldAwardedPerRound = 100;
-    [SerializeField] private int m_roundToGiveElement = 3;
+    [SerializeField] private int m_roundToGiveElement = 1;
+    [SerializeField] private int m_waveToIncreaseEnemiesPerSpawn = 3;
 
     [Header("Spawn Manager")]
     [SerializeField] private int m_enemiesSpawnPerWave = 5;
     [SerializeField] private int m_maxAdditionalEnemy = 3;
 
     private int m_enemiesToSpawn = 0;
+    private int m_enemiesPerSpawn = 1;
     private int m_waveCount = 0;
 
     // Start is called before the first frame update
@@ -32,6 +34,7 @@ public class GameManager : MonoBehaviour
         m_playerController.triggerGameOver += TriggerGameOver;
 
         m_HUDManager.action_skipRestingPeriod += SkipRestingPeriod;
+        m_playerController.RandomiseElementForPlayer();
     }
 
     // Update is called once per frame
@@ -68,6 +71,11 @@ public class GameManager : MonoBehaviour
         {
             m_pauseMenu.TogglePauseMenu();
         }
+
+        if(Input.GetKeyDown(KeyCode.RightBracket))
+        {
+            PlayerInventory.instance.GivePlayerGold(10000);
+        }
     }
 
     private void InitiateNextWave()
@@ -76,7 +84,13 @@ public class GameManager : MonoBehaviour
         m_HUDManager.UpdateWaveText(m_waveCount);
 
         m_enemiesToSpawn += m_enemiesSpawnPerWave + Random.Range(0, m_maxAdditionalEnemy);   
-        m_spawnManager.InitiateEnemySpawn(m_enemiesToSpawn);
+
+        if(m_waveCount % m_waveToIncreaseEnemiesPerSpawn == 0)
+        {
+            m_enemiesPerSpawn++;
+        }
+
+        m_spawnManager.InitiateEnemySpawn(m_enemiesToSpawn, m_enemiesPerSpawn);
     }
 
     private void OnRoundEnd()
@@ -84,7 +98,7 @@ public class GameManager : MonoBehaviour
         //give player gold on round end
         PlayerInventory.instance.GivePlayerGold(m_waveCount * m_goldAwardedPerRound);
 
-        //give player a random element on round end every third round
+        //give player a random element on round certain round
         if (m_waveCount % m_roundToGiveElement == 0)
         {
             m_playerController.RandomiseElementForPlayer();

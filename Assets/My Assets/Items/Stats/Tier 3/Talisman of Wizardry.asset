@@ -18,6 +18,7 @@ MonoBehaviour:
   cost: 1600
   hasActive: 0
   cooldownDuration: 0
+  manaCost: 0
   currentCooldown: 0
   activeDescriptionLine1: 
   activeDescriptionLine2: 
@@ -28,6 +29,7 @@ MonoBehaviour:
   attackDamageAmount: 0
   attackSpeedAmount: 0
   healthAmount: 0
-  manaAmount: 2.5
-  manaRegenAmount: 0
+  manaAmount: 0
+  manaRegenAmount: 2.5
   spellAmplificationAmount: 0
+  passiveDescriptionLine: 

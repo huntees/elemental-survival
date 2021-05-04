@@ -15,9 +15,10 @@ MonoBehaviour:
   name: Greater Health Potion
   itemCode: 3
   icon: {fileID: 21300000, guid: e2978befe2451784f94a1bb92dba8f51, type: 3}
-  cost: 200
+  cost: 250
   hasActive: 0
   cooldownDuration: 0
+  manaCost: 0
   currentCooldown: 0
   activeDescriptionLine1: 
   activeDescriptionLine2: 
@@ -31,3 +32,4 @@ MonoBehaviour:
   manaAmount: 0
   manaRegenAmount: 0
   spellAmplificationAmount: 0
+  passiveDescriptionLine: 

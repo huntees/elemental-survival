@@ -15,9 +15,10 @@ MonoBehaviour:
   name: Gloves of Haste
   itemCode: 0
   icon: {fileID: 21300000, guid: df4c3255de09b234e8bb69bce736a172, type: 3}
-  cost: 450
+  cost: 500
   hasActive: 0
   cooldownDuration: 0
+  manaCost: 0
   currentCooldown: 0
   activeDescriptionLine1: 
   activeDescriptionLine2: 
@@ -31,3 +32,4 @@ MonoBehaviour:
   manaAmount: 0
   manaRegenAmount: 0
   spellAmplificationAmount: 0
+  passiveDescriptionLine: 

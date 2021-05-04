@@ -24,7 +24,7 @@ public class FoxController : MonoBehaviour
 
     void Start()
     {
-        m_player = GameObject.Find("Player").transform;
+        m_player = GameObject.Find("FoxFollow").transform;
     }
 
     void FixedUpdate()

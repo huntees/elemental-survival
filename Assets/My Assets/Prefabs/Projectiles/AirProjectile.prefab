@@ -9586,7 +9586,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_elementType: 4
-  m_damage: 3
+  m_damage: 4
   m_projectileSpeed: 20
   m_damageIncrease: 2
   m_baseDamageVariance: 2

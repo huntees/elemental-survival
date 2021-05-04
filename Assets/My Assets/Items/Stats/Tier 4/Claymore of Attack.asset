@@ -15,9 +15,10 @@ MonoBehaviour:
   name: Claymore of Attack
   itemCode: 0
   icon: {fileID: 21300000, guid: f6f88089d8214b046a14228dce068b1a, type: 3}
-  cost: 3500
+  cost: 3800
   hasActive: 0
   cooldownDuration: 0
+  manaCost: 0
   currentCooldown: 0
   activeDescriptionLine1: 
   activeDescriptionLine2: 
@@ -25,9 +26,10 @@ MonoBehaviour:
   consumableDescription: 
   hasStats: 1
   movementSpeedAmount: 0
-  attackDamageAmount: 45
+  attackDamageAmount: 35
   attackSpeedAmount: 0
   healthAmount: 0
   manaAmount: 0
   manaRegenAmount: 0
   spellAmplificationAmount: 0
+  passiveDescriptionLine: 

@@ -161,6 +161,7 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (m_isDead || m_isStunned)
         {
             return;
@@ -190,6 +191,10 @@ public class EnemyController : MonoBehaviour
 
     private void AttackOnAnim()
     {
+        if(m_isDead || m_isStunned)
+        {
+            return ;
+        }
 
         Collider[] enemiesHit = Physics.OverlapSphere(m_attackPoint.position, m_enemyStats.m_attackRange);
         //Collider[] enemiesHit = Physics.OverlapBox(m_attackPoint.position, )
@@ -221,6 +226,7 @@ public class EnemyController : MonoBehaviour
     {
         if (m_enemyStats.m_currentHealth <= 0)
         {
+            m_animator.SetFloat("Move Speed", 0f, 0f, Time.deltaTime);
             m_animator.SetTrigger("Die");
             m_isDead = true;
             GetComponent<BoxCollider>().enabled = false;
@@ -393,7 +399,15 @@ public class EnemyController : MonoBehaviour
         yield return new WaitForSeconds(seconds);
         m_isStunned = false;
         m_stunnedParticle.SetActive(false);
-        m_agent.isStopped = false;
+
+        if (m_triggerFallDown || m_isPushedUp)
+        {
+
+        }
+        else
+        {
+            m_agent.isStopped = false;
+        }
     }
 
     public void PushBack(float force)
@@ -451,13 +465,13 @@ public class EnemyController : MonoBehaviour
     #endregion
 
 
-    //void OnDrawGizmosSelected()
-    //{
-    //    if (m_attackPoint == null)
-    //        return;
+    void OnDrawGizmosSelected()
+    {
+        if (m_attackPoint == null)
+            return;
 
-    //    Gizmos.DrawWireSphere(m_attackPoint.position, 0.7f);
-    //}
+        Gizmos.DrawWireSphere(m_attackPoint.position, 0.9f);
+    }
 
     private void UpdateHealthBar(float currentHealth, float maxHealth)
     {

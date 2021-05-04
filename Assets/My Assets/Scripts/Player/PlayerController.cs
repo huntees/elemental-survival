@@ -126,7 +126,8 @@ public class PlayerController : MonoBehaviour
     private Vector3 m_mouseRayPosition = new Vector3(0, 0, 0);
     private Vector3 m_mouseRayPositionWithoutY = new Vector3(0, 0, 0);
 
-    [Header ("Item Effects")]
+    [Header("Item Effects")]
+    [SerializeField] private GameObject m_blinkDaggerPoof;
     [SerializeField] private ParticleSystem m_restoreHealthParticle;
     [SerializeField] private ParticleSystem m_restoreManaParticle;
     [SerializeField] private ParticleSystem m_shurikenStormParticle;
@@ -174,12 +175,8 @@ public class PlayerController : MonoBehaviour
     {
         //Remove on release
         Application.targetFrameRate = 145;
-        GiveElement(Elements.Nature);
-        GiveElement(Elements.Fire);
-        GiveElement(Elements.Water);
-        GiveElement(Elements.Earth);
-        GiveElement(Elements.Air);
-        PlayerInventory.instance.GivePlayerGold(500000);
+
+        PlayerInventory.instance.GivePlayerGold(500);
 
         CalculateAttackTime();
 
@@ -874,17 +871,18 @@ public class PlayerController : MonoBehaviour
 
     private void UseBlinkDagger(float maxDistance)
     {
-        Vector3 distance = m_mouseRayPosition - base.transform.position;
+        Instantiate(m_blinkDaggerPoof, transform.position + Vector3.up, m_blinkDaggerPoof.transform.rotation);
+
+        Vector3 distance = m_mouseRayPosition - transform.position;
 
         if (distance.magnitude <= maxDistance)
         {
-            base.transform.position = m_mouseRayPosition;
+            transform.position = m_mouseRayPosition;
         }
         else
         {
-            base.transform.Translate((distance.normalized * maxDistance) + Vector3.up * 3.0f, Space.World);
+            transform.Translate((distance.normalized * maxDistance) + Vector3.up * 3.0f, Space.World);
         }
-
     }
 
     IEnumerator UseEssenceRing(float health, float seconds)
@@ -972,7 +970,7 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 GetPlayerDirection()
     {
-        direction = (m_mouseRayPositionWithoutY - base.transform.position).normalized;
+        direction = (m_mouseRayPositionWithoutY - transform.position).normalized;
 
         return new Vector3(direction.x, 0, direction.z);
     }
@@ -1012,6 +1010,14 @@ public class PlayerController : MonoBehaviour
 
     public void RandomiseElementForPlayer()
     {
+        if(!m_playerStats.m_hasAllElements)
+        {
+            //Randomise an element the player does not have yet
+            GiveElement(m_playerStats.GetNonActiveElement()[UnityEngine.Random.Range(0, m_playerStats.GetNonActiveElement().Count)]);
+            return ;
+        }
+
+        //if player has all elements, give randomly
         GiveElement((Elements)UnityEngine.Random.Range(0, Elements.GetNames(typeof(Elements)).Length - 1));
     }
 }

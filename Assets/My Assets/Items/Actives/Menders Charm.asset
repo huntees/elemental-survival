@@ -17,10 +17,10 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: f16ddf09e530eac4b9db7af43b71df86, type: 3}
   cost: 2500
   hasActive: 1
-  cooldownDuration: 55
+  cooldownDuration: 60
   manaCost: 50
   currentCooldown: 0
-  activeDescriptionLine1: Restores 100 health to the user.
+  activeDescriptionLine1: Restores 80 health to the user.
   activeDescriptionLine2: 
   isConsumable: 0
   consumableDescription: 
@@ -32,3 +32,4 @@ MonoBehaviour:
   manaAmount: 0
   manaRegenAmount: 0.5
   spellAmplificationAmount: 0
+  passiveDescriptionLine: 

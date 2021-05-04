@@ -33049,5 +33049,5 @@ MonoBehaviour:
   m_damage: 20
   m_stunDuration: 0.5
   m_damageIncrease: 5
-  m_stunDurationIncrease: 1
+  m_stunDurationIncrease: 0.5
   m_parentTransform: {fileID: 8446813221179185216}

@@ -41,6 +41,8 @@ public class PlayerStats : MonoBehaviour
     public PlayerElement m_natureElement = new PlayerElement(Elements.Nature);
     public PlayerElement m_airElement = new PlayerElement(Elements.Air);
 
+    public bool m_hasAllElements = false;
+
     void Awake()
     {
         m_currentHealth = m_maxHealth;
@@ -210,5 +212,49 @@ public class PlayerStats : MonoBehaviour
     {
         m_currentMana += m_currentMana * (mana / m_maxMana);
         m_maxMana += mana;
+    }
+
+    public List<Elements> GetNonActiveElement()
+    {
+        int i = 0;
+        List<Elements> list = new List<Elements>();
+
+        if(m_fireElement.elementLevel == 0)
+        {
+            list.Add(Elements.Fire);
+            i++;
+        }
+
+        if(m_waterElement.elementLevel == 0)
+        {
+            list.Add(Elements.Water);
+            i++;
+        }
+
+        if (m_earthElement.elementLevel == 0)
+        {
+            list.Add(Elements.Earth);
+            i++;
+        }
+
+        if (m_natureElement.elementLevel == 0)
+        {
+            list.Add(Elements.Nature);
+            i++;
+        }
+
+        if (m_airElement.elementLevel == 0)
+        {
+            list.Add(Elements.Air);
+            i++;
+        }
+
+        //If i is 1, player would have had all elements afterwards
+        if (i == 1)
+        {
+            m_hasAllElements = true;
+        }
+
+        return list;
     }
 }

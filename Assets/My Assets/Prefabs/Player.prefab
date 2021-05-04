@@ -9609,6 +9609,36 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!1 &2030270430
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2030270431}
+  m_Layer: 2
+  m_Name: FoxFollow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2030270431
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2030270430}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -1.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2065023656341131609}
+  m_RootOrder: 22
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2065023656086738473
 GameObject:
   m_ObjectHideFlags: 0
@@ -44800,6 +44830,7 @@ Transform:
   - {fileID: 1807517624}
   - {fileID: 4188818822016605517}
   - {fileID: 1434103601}
+  - {fileID: 2030270431}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -44877,7 +44908,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bab42cbeacaa84a4eac8594b6f3600d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_movementSpeed: 32
+  m_movementSpeed: 3
   m_attackDamage: 0
   m_attackSpeed: 0
   m_maxHealth: 100
@@ -44941,6 +44972,7 @@ MonoBehaviour:
   m_overchargeObject: {fileID: 2321431205196088379}
   m_overchargeDetails: {fileID: 11400000, guid: e9a97b600f45a8e469fc1d726d2a2361,
     type: 2}
+  m_blinkDaggerPoof: {fileID: 100000, guid: a4585a9f0750b8b4a80739050af7ecbc, type: 3}
   m_restoreHealthParticle: {fileID: 1807517623}
   m_restoreManaParticle: {fileID: 6155955380620919090}
   m_shurikenStormParticle: {fileID: 1434103603}
@@ -54865,15 +54897,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1160ab1aedd63ba41a8fd487626c963d, type: 3}
---- !u!1 &2321431205196088379 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2321431204844330279, guid: 1160ab1aedd63ba41a8fd487626c963d,
-    type: 3}
-  m_PrefabInstance: {fileID: 729323804}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &344990207227862453 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 344990207947736233, guid: 1160ab1aedd63ba41a8fd487626c963d,
+    type: 3}
+  m_PrefabInstance: {fileID: 729323804}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2321431205196088379 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2321431204844330279, guid: 1160ab1aedd63ba41a8fd487626c963d,
     type: 3}
   m_PrefabInstance: {fileID: 729323804}
   m_PrefabAsset: {fileID: 0}

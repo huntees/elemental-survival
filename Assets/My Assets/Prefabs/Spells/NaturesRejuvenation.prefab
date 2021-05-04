@@ -4733,9 +4733,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6114832978f9e14597a72d5bf483d22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_healPerSecond: 2
+  m_healPerSecond: 1
   m_duration: 2
-  m_healIncrease: 3
+  m_healIncrease: 2
   m_durationIncrease: 1
   m_triggerSound: {fileID: 8300000, guid: d54d5f75041761b4584bf87725adb243, type: 3}
 --- !u!82 &7683108523201201586

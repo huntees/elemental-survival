@@ -138,6 +138,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d96fec03a5bf06a42ad97543d84b5aed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_maxBounty: 40
+  m_minBounty: 34
+  m_bountyIncreasePerRound: 1
   m_spawnLocations:
   - {fileID: 5910013809535352452}
   - {fileID: 5910013808523767527}
@@ -145,8 +148,11 @@ MonoBehaviour:
   - {fileID: 5910013809354541088}
   m_maxSpawnTime: 8
   m_minSpawnTime: 4
-  enemiesLeft: 0
-  isSpawning: 0
+  m_healthIncrease: 10
+  m_movementSpeedIncrease: 0.03
+  m_attackDamageIncrease: 5
+  m_enemiesLeft: 0
+  m_isSpawning: 0
 --- !u!114 &5910013809617933448
 MonoBehaviour:
   m_ObjectHideFlags: 0

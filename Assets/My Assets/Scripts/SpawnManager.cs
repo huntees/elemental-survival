@@ -56,14 +56,14 @@ public class SpawnManager : MonoBehaviour
 
     }
 
-    public void InitiateEnemySpawn(int numOfEnemies)
+    public void InitiateEnemySpawn(int numOfEnemies, int enemiesPerSpawn)
     {
         IncrementBounty();
         UpdateStatsIncrement();
-        StartCoroutine(SpawnEnemies(numOfEnemies));
+        StartCoroutine(SpawnEnemies(numOfEnemies, enemiesPerSpawn));
     }
 
-    IEnumerator SpawnEnemies(int numOfEnemies)
+    IEnumerator SpawnEnemies(int numOfEnemies, int enemiesPerSpawn)
     {
         m_isSpawning = true;
         int enemiesSpawned = 0;
@@ -71,22 +71,31 @@ public class SpawnManager : MonoBehaviour
         while (enemiesSpawned < numOfEnemies)
         {
             m_randomSpawnTime = Random.Range(m_minSpawnTime, m_maxSpawnTime);
-            m_randomElement = Random.Range(0, m_elementCount);
-            m_randomSpawnIndex = Random.Range(0, m_spawnLocations.Length);
             
             yield return new WaitForSeconds(m_randomSpawnTime);
 
-            m_instantiatedEnemy = m_enemyObjectPool.GetAvailableObject();
-            m_instantiatedEnemy.transform.position = m_spawnLocations[m_randomSpawnIndex].position;
+            for (int i = 0; i < enemiesPerSpawn; i++)
+            {
+                m_randomElement = Random.Range(0, m_elementCount);
+                m_randomSpawnIndex = Random.Range(0, m_spawnLocations.Length);
 
-            m_enemyController = m_instantiatedEnemy.GetComponent<EnemyController>();
-            m_enemyController.ChangeElement((Elements)m_randomElement);
-            m_enemyController.IncrementStats(m_currentHealthIncrease, m_currentMovementSpeedIncrease, m_currentAttackDamageIncrease);
-            
-            m_instantiatedEnemy.SetActive(true);
+                m_instantiatedEnemy = m_enemyObjectPool.GetAvailableObject();
+                m_instantiatedEnemy.transform.position = m_spawnLocations[m_randomSpawnIndex].position;
 
-            enemiesSpawned++;
-            m_enemiesLeft++;
+                m_enemyController = m_instantiatedEnemy.GetComponent<EnemyController>();
+                m_enemyController.ChangeElement((Elements)m_randomElement);
+                m_enemyController.IncrementStats(m_currentHealthIncrease, m_currentMovementSpeedIncrease, m_currentAttackDamageIncrease);
+
+                m_instantiatedEnemy.SetActive(true);
+
+                enemiesSpawned++;
+                m_enemiesLeft++;
+
+                if(enemiesSpawned >= numOfEnemies)
+                {
+                    break;
+                }
+            }
         }
 
         m_isSpawning = false;

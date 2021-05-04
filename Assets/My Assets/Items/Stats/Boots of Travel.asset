@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Boots of Travel
   itemCode: 0
   icon: {fileID: 21300000, guid: b195f546314754b47a76e077c316c8b6, type: 3}
-  cost: 2450
+  cost: 4450
   hasActive: 0
   cooldownDuration: 0
   manaCost: 0
@@ -25,7 +25,7 @@ MonoBehaviour:
   isConsumable: 0
   consumableDescription: 
   hasStats: 1
-  movementSpeedAmount: 70
+  movementSpeedAmount: 40
   attackDamageAmount: 0
   attackSpeedAmount: 0
   healthAmount: 0
