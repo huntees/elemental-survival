@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
-//Simple FPS script from Unity Docs for dev purposes only.
+/*Simple FPS script from Unity Wiki for dev purposes only.
+ * https://wiki.unity3d.com/index.php/FramesPerSecond
+ */
+
 public class ShowFPS : MonoBehaviour
 {
 	float deltaTime = 0.0f;

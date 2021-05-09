@@ -83,8 +83,9 @@ public class EnemyController : MonoBehaviour
         m_enemyStats = GetComponent<EnemyStats>();
         m_animator = GetComponent<Animator>();
         m_agent = GetComponent<NavMeshAgent>();
-        
+
         m_player = GameObject.Find("Player").transform;
+        m_agent.stoppingDistance = m_enemyStats.m_stoppingDistance;
     }
 
     void FixedUpdate()
@@ -465,13 +466,13 @@ public class EnemyController : MonoBehaviour
     #endregion
 
 
-    void OnDrawGizmosSelected()
-    {
-        if (m_attackPoint == null)
-            return;
+    //void OnDrawGizmosSelected()
+    //{
+    //    if (m_attackPoint == null)
+    //        return;
 
-        Gizmos.DrawWireSphere(m_attackPoint.position, 0.9f);
-    }
+    //    Gizmos.DrawWireSphere(m_attackPoint.position, 0.9f);
+    //}
 
     private void UpdateHealthBar(float currentHealth, float maxHealth)
     {

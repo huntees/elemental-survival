@@ -12,19 +12,27 @@ public class EnemyStats : MonoBehaviour
     [SerializeField] private Material m_natureGolemMaterial;
     [SerializeField] private Material m_airGolemMaterial;
 
-    [Header("Default Values")]
-    [SerializeField] private float m_defaultMaxHealth = 40.0f;
+    [Header("Default Values [Normal Mode]")]
+    [SerializeField] private float m_defaultMaxHealth = 30.0f;
     [SerializeField] private float m_defaultMovementSpeed = 2.0f;
-    [SerializeField] private float m_defaultAttackDamage = 12.0f;
+    [SerializeField] private float m_defaultAttackDamage = 10.0f;
+    [SerializeField] private float m_defaultStoppingDistance = 1.0f;
+
+    [Header("Default Values [Hard Mode]")]
+    [SerializeField] private float m_defaultHardMaxHealth = 40.0f;
+    [SerializeField] private float m_defaultHardMovementSpeed = 3.0f;
+    [SerializeField] private float m_defaultHardAttackDamage = 13.0f;
+    [SerializeField] private float m_defaultHardStoppingDistance = 0.5f;
 
     [Header("Current Values")]
     public float m_maxHealth;
-    [HideInInspector] public float m_currentHealth = 40.0f;
+    [HideInInspector] public float m_currentHealth = 30.0f;
     public float m_movementSpeed = 2.0f;
+    public float m_stoppingDistance = 1.0f;
     public float m_attackDamage = 12.0f;
 
     public float m_attackFrequency = 1f;
-    public float m_attackRange = 0.5f;
+    public float m_attackRange = 0.9f;
 
     public Elements m_elementType; 
 
@@ -33,13 +41,16 @@ public class EnemyStats : MonoBehaviour
     {
         m_meshRender = transform.GetChild(2).GetComponent<SkinnedMeshRenderer>();
 
-        m_maxHealth = m_defaultMaxHealth;
+        if (Difficulty.instance != null && Difficulty.instance.m_isHardMode)
+        {
+            m_defaultMaxHealth = m_defaultHardMaxHealth;
+            m_defaultMovementSpeed = m_defaultHardMovementSpeed;
+            m_defaultAttackDamage = m_defaultHardAttackDamage;
+            m_defaultStoppingDistance = m_defaultHardStoppingDistance;
+        }
+
+        m_stoppingDistance = m_defaultStoppingDistance;
         m_currentHealth = m_maxHealth;
-
-        m_movementSpeed = m_defaultMovementSpeed;
-
-        m_attackDamage = m_defaultAttackDamage;
-
     }
 
     public void ChangeElement(Elements element)

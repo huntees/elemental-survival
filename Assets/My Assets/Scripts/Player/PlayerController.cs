@@ -355,7 +355,7 @@ public class PlayerController : MonoBehaviour
 
     private void CastSteamBlast()
     {
-        if(!HasEnoughManaNoSound(m_steamBlastDetails.manaCost))
+        if(!HasEnoughManaNoSound(m_steamBlastDetails.manaCost * Time.deltaTime))
         {
             if (m_isSteamBlastPlaying)
             {
@@ -373,7 +373,7 @@ public class PlayerController : MonoBehaviour
             m_isSteamBlastPlaying = true;
         }
 
-        SpendMana(m_steamBlastDetails.manaCost);
+        SpendMana(m_steamBlastDetails.manaCost * Time.deltaTime);
     }
 
     private void CastGeyser()

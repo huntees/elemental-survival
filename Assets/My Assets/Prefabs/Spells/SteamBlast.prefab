@@ -4769,7 +4769,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_damage: 0.2
-  m_pushBackForce: 0.05
+  m_pushBackForce: 0.03
   m_damageIncrease: 0.1
   m_pushBackForceIncrease: 0.03
   m_triggerSound: {fileID: 8300000, guid: 8cfb2ec5991248d47bb1708d661ba524, type: 3}

@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Steam Blast
   spellCode: 2
   icon: {fileID: 21300000, guid: dd00b7865cb7b2543a17fe3de153a416, type: 3}
-  manaCost: 0.1
+  manaCost: 30
   showDamageType: 1
   damageType: 1
   cooldownDuration: 0

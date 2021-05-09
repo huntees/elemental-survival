@@ -52,8 +52,6 @@ public class SpawnManager : MonoBehaviour
         m_currentHealthIncrease = -m_healthIncrease;
         m_currentMovementSpeedIncrease = -m_movementSpeedIncrease;
         m_currentAttackDamageIncrease = -m_attackDamageIncrease;
-
-
     }
 
     public void InitiateEnemySpawn(int numOfEnemies, int enemiesPerSpawn)
