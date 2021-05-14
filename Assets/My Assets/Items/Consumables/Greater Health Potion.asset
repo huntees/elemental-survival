@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08a16f64111e0c64885ca518f86ea16a, type: 3}
+  m_Name: Greater Health Potion
+  m_EditorClassIdentifier: 
+  name: Greater Health Potion
+  itemCode: 3
+  icon: {fileID: 21300000, guid: e2978befe2451784f94a1bb92dba8f51, type: 3}
+  cost: 250
+  hasActive: 0
+  cooldownDuration: 0
+  manaCost: 0
+  currentCooldown: 0
+  activeDescriptionLine1: 
+  activeDescriptionLine2: 
+  isConsumable: 1
+  consumableDescription: Restores 100 Health
+  hasStats: 0
+  movementSpeedAmount: 0
+  attackDamageAmount: 0
+  attackSpeedAmount: 0
+  healthAmount: 0
+  manaAmount: 0
+  manaRegenAmount: 0
+  spellAmplificationAmount: 0
+  passiveDescriptionLine: 

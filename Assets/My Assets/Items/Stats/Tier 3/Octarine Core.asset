@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08a16f64111e0c64885ca518f86ea16a, type: 3}
+  m_Name: Octarine Core
+  m_EditorClassIdentifier: 
+  name: Octarine Core
+  itemCode: 0
+  icon: {fileID: 21300000, guid: 3210be3fd5be33f499b03a7ee4307171, type: 3}
+  cost: 4750
+  hasActive: 0
+  cooldownDuration: 0
+  currentCooldown: 0
+  activeDescriptionLine1: 
+  activeDescriptionLine2: 
+  isConsumable: 0
+  consumableDescription: 
+  hasStats: 1
+  movementSpeedAmount: 0
+  attackDamageAmount: 0
+  attackSpeedAmount: 0
+  healthAmount: 150
+  manaAmount: 150
+  manaRegenAmount: 3
+  spellAmplificationAmount: 0.03

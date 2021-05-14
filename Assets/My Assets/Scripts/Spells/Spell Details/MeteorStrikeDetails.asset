@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b31e2aceaab9be41b57f312d5b2ee66, type: 3}
+  m_Name: MeteorStrikeDetails
+  m_EditorClassIdentifier: 
+  name: Meteor Strike
+  spellCode: 7
+  icon: {fileID: 21300000, guid: 929b2d07f5af9f34090a95c856c31cb6, type: 3}
+  manaCost: 50
+  showDamageType: 1
+  damageType: 0
+  cooldownDuration: 18
+  activeDescriptionLine1: Calls down waves of meteors that damage
+  activeDescriptionLine2: enemies in the target area for a duration.
+  damageScaleInfoLine1: Fire increases damage
+  damageScaleInfoLine2: Air increases duration
