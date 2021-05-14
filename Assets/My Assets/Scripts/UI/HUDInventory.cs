@@ -18,7 +18,6 @@ public class HUDInventory : MonoBehaviour
 
     private ItemSlot[] m_itemSlots;
 
-    // Start is called before the first frame update
     void Start()
     {
         m_playerInventory = PlayerInventory.instance;
@@ -30,12 +29,12 @@ public class HUDInventory : MonoBehaviour
         m_itemSlots = m_inventoryParent.GetComponentsInChildren<ItemSlot>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if(m_textTimer > 0.0f)
         {
             m_textTimer -= Time.deltaTime;
+
             if(m_textTimer <= 0.0f)
             {
                 m_inventoryStatusMessage.text = "";

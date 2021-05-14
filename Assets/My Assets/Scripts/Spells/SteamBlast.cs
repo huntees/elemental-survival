@@ -42,7 +42,6 @@ public class SteamBlast : MonoBehaviour
         {
             other.GetComponent<EnemyController>().PushBack(m_totalPushBackForce);
             other.GetComponent<EnemyController>().TakeDamage(m_totalDamage, Elements.Water);
-
         }
     }
 

@@ -9,6 +9,7 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
+        //To keep track of the difficulty selected across different scenes
         if (Difficulty.instance == null)
         {
             Instantiate(m_difficultyObject);

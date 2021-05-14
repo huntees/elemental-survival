@@ -244,6 +244,7 @@ public class HUDManager : MonoBehaviour
     {
         m_spellSlot.UpdateSpellCooldown(cooldownTimer, cooldown);
     }
+
     #endregion
 
     #endregion

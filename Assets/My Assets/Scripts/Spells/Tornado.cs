@@ -16,7 +16,6 @@ public class Tornado : MonoBehaviour
 
     private EnemyController m_collidedEnemy;
 
-    // Start is called before the first frame update
     void FixedUpdate()
     {
         transform.position += transform.forward * m_speed * Time.deltaTime;

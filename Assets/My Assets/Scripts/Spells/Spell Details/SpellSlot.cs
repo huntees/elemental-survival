@@ -25,6 +25,7 @@ public class SpellSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     private void Start()
     {
+        //Initialisations
         m_cooldownTextObject = m_cooldownText.gameObject;
 
         m_cooldownTextObject.SetActive(false);

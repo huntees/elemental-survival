@@ -43,7 +43,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private GameObject m_cyclonePrefab;
     private bool m_isRotating = false;
 
-    //Event
+    //Events
     private Action<float, Elements> takeElementalDamage;
     public event Action enemyDies;
 
@@ -67,7 +67,7 @@ public class EnemyController : MonoBehaviour
 
         GetComponent<BoxCollider>().enabled = true;
 
-        //Set destination upon spawn
+        //Set target to follow upon spawn
         m_targetPosition = m_player.position;
         m_agent.SetDestination(m_targetPosition);
 
@@ -77,9 +77,9 @@ public class EnemyController : MonoBehaviour
 
     #endregion
 
-    // Start is called before the first frame update
     void Awake()
     {
+        //Initialisations
         m_enemyStats = GetComponent<EnemyStats>();
         m_animator = GetComponent<Animator>();
         m_agent = GetComponent<NavMeshAgent>();
@@ -149,6 +149,7 @@ public class EnemyController : MonoBehaviour
                     m_agent.isStopped = false;
                 }
 
+                //Give controls back to NavMeshAgent
                 m_agent.updatePosition = true;
                 m_agent.updateRotation = true;
                 m_triggerFallDown = false;
@@ -162,13 +163,12 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         if (m_isDead || m_isStunned)
         {
             return;
         }
 
-        //Attack
+        //Attack if within range
         if ((m_player.position - transform.position).magnitude <= 2f)
         {
             if (Time.time >= m_nextAttackTime)
@@ -198,8 +198,8 @@ public class EnemyController : MonoBehaviour
         }
 
         Collider[] enemiesHit = Physics.OverlapSphere(m_attackPoint.position, m_enemyStats.m_attackRange);
-        //Collider[] enemiesHit = Physics.OverlapBox(m_attackPoint.position, )
 
+        //If object hit is player
         foreach (Collider enemy in enemiesHit)
         {
             if (enemy.gameObject.CompareTag("Player"))
@@ -217,6 +217,8 @@ public class EnemyController : MonoBehaviour
     {
 
         m_animator.SetTrigger("Take Damage");
+
+        //Takes damage based on the elemental type it is assigned via delegate
         takeElementalDamage?.Invoke(damage, element);
 
         CheckDeath();
@@ -227,9 +229,10 @@ public class EnemyController : MonoBehaviour
     {
         if (m_enemyStats.m_currentHealth <= 0)
         {
+            //Disabling various stuff on death
+            m_isDead = true;
             m_animator.SetFloat("Move Speed", 0f, 0f, Time.deltaTime);
             m_animator.SetTrigger("Die");
-            m_isDead = true;
             GetComponent<BoxCollider>().enabled = false;
             m_stunnedParticle.SetActive(false);
             m_isRotating = false;
@@ -384,6 +387,7 @@ public class EnemyController : MonoBehaviour
             return ;
         }
 
+        //If already stunned, restart stun duration
         if(m_isStunned)
         {
             StopCoroutine(StunCooldown(seconds));
@@ -401,11 +405,8 @@ public class EnemyController : MonoBehaviour
         m_isStunned = false;
         m_stunnedParticle.SetActive(false);
 
-        if (m_triggerFallDown || m_isPushedUp)
-        {
-
-        }
-        else
+        //Resumes NavMeshAgent only if not falling down or pushed up
+        if (!(m_triggerFallDown || m_isPushedUp))
         {
             m_agent.isStopped = false;
         }
@@ -446,6 +447,7 @@ public class EnemyController : MonoBehaviour
             return ;
         }
 
+        //spawn a cyclone underneath enemy lasting a set duration
         var cyclone = Instantiate(m_cyclonePrefab, transform.position, m_cyclonePrefab.transform.rotation);
         Cyclone component = cyclone.GetComponent<Cyclone>();
         component.m_cycloneDuration = duration;
@@ -465,15 +467,6 @@ public class EnemyController : MonoBehaviour
 
     #endregion
 
-
-    //void OnDrawGizmosSelected()
-    //{
-    //    if (m_attackPoint == null)
-    //        return;
-
-    //    Gizmos.DrawWireSphere(m_attackPoint.position, 0.9f);
-    //}
-
     private void UpdateHealthBar(float currentHealth, float maxHealth)
     {
         if(m_isDead)
@@ -489,4 +482,12 @@ public class EnemyController : MonoBehaviour
     {
         m_enemyStats.IncrementStats(health, movementSpeed, attackDamage);
     }
+
+    //void OnDrawGizmosSelected()
+    //{
+    //    if (m_attackPoint == null)
+    //        return;
+
+    //    Gizmos.DrawWireSphere(m_attackPoint.position, 0.9f);
+    //}
 }

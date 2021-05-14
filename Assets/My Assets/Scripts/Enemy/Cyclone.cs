@@ -7,9 +7,11 @@ public class Cyclone : MonoBehaviour
 
     void Start()
     {
+        //Destroy object after parameter duration
         Destroy(gameObject, m_cycloneDuration);
     }
 
+    //Sends enemy up on enter
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Enemy"))
@@ -22,6 +24,7 @@ public class Cyclone : MonoBehaviour
         }
     }
 
+    //Sends enemy up on stay
     void OnTriggerStay(Collider other)
     {
         if (other.gameObject.CompareTag("Enemy"))

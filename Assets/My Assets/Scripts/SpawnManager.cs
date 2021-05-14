@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
@@ -74,12 +73,15 @@ public class SpawnManager : MonoBehaviour
 
             for (int i = 0; i < enemiesPerSpawn; i++)
             {
+                //Randomise spawn element and location
                 m_randomElement = Random.Range(0, m_elementCount);
                 m_randomSpawnIndex = Random.Range(0, m_spawnLocations.Length);
 
+                //Get any enemy and set their location
                 m_instantiatedEnemy = m_enemyObjectPool.GetAvailableObject();
                 m_instantiatedEnemy.transform.position = m_spawnLocations[m_randomSpawnIndex].position;
 
+                //Prepare the enemy for spawning
                 m_enemyController = m_instantiatedEnemy.GetComponent<EnemyController>();
                 m_enemyController.ChangeElement((Elements)m_randomElement);
                 m_enemyController.IncrementStats(m_currentHealthIncrease, m_currentMovementSpeedIncrease, m_currentAttackDamageIncrease);
@@ -89,6 +91,7 @@ public class SpawnManager : MonoBehaviour
                 enemiesSpawned++;
                 m_enemiesLeft++;
 
+                //break if enemies spawned exceeds limit
                 if(enemiesSpawned >= numOfEnemies)
                 {
                     break;

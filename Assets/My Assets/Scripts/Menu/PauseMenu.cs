@@ -17,6 +17,7 @@ public class PauseMenu : MonoBehaviour
         m_pauseMenuObject.SetActive(false);
         m_gameOverObject.SetActive(true);
 
+        //Pause game simulation after 1.7 seconds
         Invoke("DelayedPause", 1.7f);
     }
 

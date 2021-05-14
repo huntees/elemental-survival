@@ -72,6 +72,7 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
 
     private void UseItem()
     {
+        //if item has an active, is not on cooldown, and player has enough mana to cast it
         if (m_item.hasActive && m_currentItemCooldown <= 0.0f && m_playerController.HasEnoughMana(m_item.manaCost))
         {
             m_playerController.UseItem(m_item.itemCode);

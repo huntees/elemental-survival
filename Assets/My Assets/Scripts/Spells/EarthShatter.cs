@@ -19,10 +19,10 @@ public class EarthShatter : MonoBehaviour
 
     void Start()
     {
+        //Destroy itself after 2 seconds
         Destroy(gameObject, 2f);
     }
 
-    // Update is called once per frame
     void Update()
     {
         m_scaleExtension = Mathf.SmoothDamp(m_scaleExtension, 17f, ref m_yVelocity, 0.5f);

@@ -40,8 +40,10 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //If no more enemies left and spawnManager is not spawning
         if (m_spawnManager.m_enemiesLeft <= 0 && !m_spawnManager.m_isSpawning)
         {
+            //If resting timer reaches 0, begin next wave
             if(m_cooloffTimer <= 0f)
             {
                 m_HUDManager.UpdateStatusText("");
@@ -51,6 +53,7 @@ public class GameManager : MonoBehaviour
                 InitiateNextWave();
                 m_cooloffTimer = m_cooloffPeriod;
             }
+            //Start counting down resting timer and trigger OnRoundEnd as well as make shop appear
             else
             {
                 m_HUDManager.UpdateStatusText("Next Wave In " + Mathf.Round(m_cooloffTimer) + " Seconds!");
@@ -60,6 +63,8 @@ public class GameManager : MonoBehaviour
                 {
                     m_HUDManager.ShowShop(true);
                     m_audioSource.Play();
+
+                    //Put here for efficiency and piggyback off whether shop is active which signifies round ended
                     OnRoundEnd();
                 }
 
@@ -72,6 +77,7 @@ public class GameManager : MonoBehaviour
             m_pauseMenu.TogglePauseMenu();
         }
 
+        //cheat
         if(Input.GetKeyDown(KeyCode.RightBracket))
         {
             PlayerInventory.instance.GivePlayerGold(10000);
@@ -83,8 +89,10 @@ public class GameManager : MonoBehaviour
         m_waveCount++;
         m_HUDManager.UpdateWaveText(m_waveCount);
 
+        //Spawns a set amount of enemies + a random amount
         m_enemiesToSpawn += m_enemiesSpawnPerWave + Random.Range(0, m_maxAdditionalEnemy);   
 
+        //Increases enemies per spawn every 3rd wave, i.e. spawns faster
         if(m_waveCount % m_waveToIncreaseEnemiesPerSpawn == 0)
         {
             m_enemiesPerSpawn++;
@@ -98,7 +106,7 @@ public class GameManager : MonoBehaviour
         //give player gold on round end
         PlayerInventory.instance.GivePlayerGold(m_waveCount * m_goldAwardedPerRound);
 
-        //give player a random element on round certain round
+        //give player a random element on certain round
         if (m_waveCount % m_roundToGiveElement == 0)
         {
             m_playerController.RandomiseElementForPlayer();

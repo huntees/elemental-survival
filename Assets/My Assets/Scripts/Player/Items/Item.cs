@@ -42,6 +42,7 @@ public class Item : ScriptableObject
 
     private string tooltipText = "";
 
+    //Builds the tootip string
     public string GetTooltipText()
     {
         tooltipText = name + "\n";
@@ -85,6 +86,7 @@ public class Item : ScriptableObject
         return tooltipText;
     }
 
+    //Various methods for getting string, return nothing if the item does not give that attribute
     private string GetMovementSpeedAmountText()
     {
         if (movementSpeedAmount == 0.0f)

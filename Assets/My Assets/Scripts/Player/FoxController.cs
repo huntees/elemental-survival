@@ -32,6 +32,7 @@ public class FoxController : MonoBehaviour
         HandleFollowPlayer();
         m_animator.SetFloat("Move Speed", m_agent.velocity.magnitude, 0f, Time.deltaTime);
 
+        //barks at player if afk for too long
         if(m_agent.velocity.magnitude <= 0.05f)
         {
             if (m_jumpTime >= m_nextJumpTime)
@@ -54,6 +55,7 @@ public class FoxController : MonoBehaviour
             m_agent.SetDestination(m_player.position);
             m_nextUpdateDestinationTime = Time.time + 1.0f;
 
+            //if approached, start following the player
             if (!m_isFound && (m_player.position - transform.position).magnitude <= 5.0f)
             {
                 m_isFound = true;

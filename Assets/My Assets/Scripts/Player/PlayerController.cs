@@ -173,7 +173,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        //Remove on release
+        //Caps fps
         Application.targetFrameRate = 145;
 
         PlayerInventory.instance.GivePlayerGold(500);
@@ -238,13 +238,11 @@ public class PlayerController : MonoBehaviour
                 if (Input.GetKey(KeyCode.Mouse0))
                 {
                     Shoot(0);
-                    //m_nextAttackTime = Time.time + (1f - (m_playerStats.m_attackSpeed * 0.01f));
                     m_nextAttackTime = Time.time + m_attackTime;
                 }
                 else if (Input.GetKey(KeyCode.Mouse1))
                 {
                     Shoot(1);
-                    //m_nextAttackTime = Time.time + (1f - (m_playerStats.m_attackSpeed * 0.01f));
                     m_nextAttackTime = Time.time + m_attackTime;
                 }
             }
@@ -282,12 +280,14 @@ public class PlayerController : MonoBehaviour
         {
             CastSpell?.Invoke();
         }
+
         //Cast only when key is pressed
         else if (Input.GetKeyDown(KeyCode.Space))
         {
             CastSpell?.Invoke();
         }
 
+        //Stops steamblast if key released
         if (m_isSteamBlastPlaying && Input.GetKeyUp(KeyCode.Space))
         {
             m_steamBlastComponent.StopSteamBlast();
@@ -316,6 +316,7 @@ public class PlayerController : MonoBehaviour
 
         if (m_playerStats.m_currentHealth <= 0)
         {
+            //If player has ankh
             if(PlayerInventory.instance.UseAnkhOfReincarnation())
             {
                 m_audioSource.PlayOneShot(m_ankhOfImmortalitySound);
@@ -327,8 +328,9 @@ public class PlayerController : MonoBehaviour
             }
 
             m_animator.SetTrigger("Die");
-            //send player died event
             m_isDead = true;
+
+            //send player died event
             triggerGameOver?.Invoke();
         }
     }
@@ -355,6 +357,7 @@ public class PlayerController : MonoBehaviour
 
     private void CastSteamBlast()
     {
+        //Stops steamblast if out of mana
         if(!HasEnoughManaNoSound(m_steamBlastDetails.manaCost * Time.deltaTime))
         {
             if (m_isSteamBlastPlaying)
@@ -494,7 +497,7 @@ public class PlayerController : MonoBehaviour
             m_animator.SetTrigger("Cast Spell");
             SpendMana(m_sandStormDetails.manaCost);
 
-            var spell = Instantiate(m_sandStormPrefab, m_mouseRayPosition + new Vector3(0, 1f, 0), m_projectileBarrel.rotation);
+            var spell = Instantiate(m_sandStormPrefab, m_mouseRayPosition + new Vector3(0, 1f, 0), m_sandStormPrefab.transform.rotation);
             spell.GetComponentInChildren<SandStorm>().SetValueIncrease(m_playerStats.m_earthElement.elementLevel, 
                 m_playerStats.m_airElement.elementLevel, m_playerStats.m_spellAmp);
 
@@ -503,7 +506,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void CastOverCharge()
+    private void CastOvercharge()
     {
         if (m_overchargeCooldownTimer <= 0.0f && !m_overchargeComponent.isActiveAndEnabled && HasEnoughMana(m_overchargeDetails.manaCost))
         {
@@ -646,7 +649,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (elementQueue.Contains(m_playerStats.m_airElement) && elementQueue.Contains(m_playerStats.m_natureElement))
         {
-            CastSpell = CastOverCharge;
+            CastSpell = CastOvercharge;
             m_activeSpell = SpellCode.Overcharge;
             UpdateSpellCooldownHUD(m_overchargeCooldownTimer, m_overchargeDetails.cooldownDuration);
         }
@@ -657,7 +660,7 @@ public class PlayerController : MonoBehaviour
             UpdateSpellCooldownHUD(0.0f, 0.0f);
         }
 
-        //turns off steamblast if it is still being used after switching
+        //turns off steamblast if it is still being used after spell switching
         if (m_isSteamBlastPlaying && CastSpell != CastSteamBlast)
         {
             m_steamBlastComponent.StopSteamBlast();
@@ -733,7 +736,7 @@ public class PlayerController : MonoBehaviour
 
     private void SwitchElementListener()
     {
-
+        //If left shift is held, return out because left shift + 1-6 uses item instead
         if (Input.GetKey(KeyCode.LeftShift))
         {
             return;
@@ -881,6 +884,8 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            //if exceeding blink limit, teleport 12 units to that direction instead, placed 3 units up to prevent 
+            //teleporting into objects because we wont know what the height of where we are teleporting is
             transform.Translate((distance.normalized * maxDistance) + Vector3.up * 3.0f, Space.World);
         }
     }
@@ -997,6 +1002,7 @@ public class PlayerController : MonoBehaviour
         return true;
     }
 
+    //Use for steamblast, otherwise sound will constantly play
     public bool HasEnoughManaNoSound(float amount)
     {
         return m_playerStats.m_currentMana >= amount;

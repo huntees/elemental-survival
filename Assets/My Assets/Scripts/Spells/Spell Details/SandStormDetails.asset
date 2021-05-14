@@ -15,7 +15,7 @@ MonoBehaviour:
   name: Sand Storm
   spellCode: 9
   icon: {fileID: 21300000, guid: a69c5633ada1bf742895217b022e9540, type: 3}
-  manaCost: 25
+  manaCost: 30
   showDamageType: 1
   damageType: 2
   cooldownDuration: 20

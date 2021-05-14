@@ -42,6 +42,7 @@ public class ProjectileLogic : MonoBehaviour
         m_damage += m_damageIncrease * elementLevel;
         m_damage += (int)additionalDamage;
 
+        //Randomises a damage between min and max threshold
         m_minDamageThreshold = m_damage - m_baseDamageVariance - (int)(elementLevel * 0.5f);
         m_maxDamageThreshold = m_damage + m_baseDamageVariance + (int)(elementLevel * 0.5f);
         m_damage = Random.Range(m_minDamageThreshold, m_maxDamageThreshold + 1);
@@ -51,6 +52,7 @@ public class ProjectileLogic : MonoBehaviour
     {
         collidedObject = collision.gameObject;
 
+        //Only collide on object that isnt player or other projectiles
         if (!(collidedObject.CompareTag("Player") || collidedObject.CompareTag("Projectile")))
         {
             if (m_hitPrefab != null)

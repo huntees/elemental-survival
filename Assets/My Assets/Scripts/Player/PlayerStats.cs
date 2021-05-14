@@ -16,9 +16,9 @@ public class PlayerStats : MonoBehaviour
     public float m_manaRegen = 1.0f;
 
     public float m_spellAmp = 0.0f;
-
     public float m_damageBlock = 0.0f;
 
+    //Using class instead of struct so it will be referred to by reference, as per C# docs
     public class PlayerElement
     {
         public Elements elementType;
@@ -49,6 +49,7 @@ public class PlayerStats : MonoBehaviour
         m_currentMana = m_maxMana;
     }
 
+    //Queue elements
     public void ActivateElement(Elements element)
     {
         switch(element)
@@ -214,6 +215,7 @@ public class PlayerStats : MonoBehaviour
         m_maxMana += mana;
     }
 
+    //Use for evenly distribution of elements so no elements become level 2 unless all others were acquired
     public List<Elements> GetNonActiveElement()
     {
         int i = 0;

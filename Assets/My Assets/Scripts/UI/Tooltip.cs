@@ -38,6 +38,7 @@ public class Tooltip : MonoBehaviour
 
     private void Update()
     {
+        //To prevent tooltip from appearing on edge of screen
         m_anchoredPostion = Input.mousePosition / m_canvasRectTransform.localScale.x;
 
         if(m_anchoredPostion.x + m_backgroundRectTransform.rect.width > m_canvasRectTransform.rect.width)

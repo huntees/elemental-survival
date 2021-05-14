@@ -36,11 +36,12 @@ public class EnemyStats : MonoBehaviour
 
     public Elements m_elementType; 
 
-    // Start is called before the first frame update
     void Awake()
     {
+        //Gets the mesh renderer component so we can swap golem textures
         m_meshRender = transform.GetChild(2).GetComponent<SkinnedMeshRenderer>();
 
+        //Sets their values if hardmode was selected
         if (Difficulty.instance != null && Difficulty.instance.m_isHardMode)
         {
             m_defaultMaxHealth = m_defaultHardMaxHealth;
@@ -53,6 +54,7 @@ public class EnemyStats : MonoBehaviour
         m_currentHealth = m_maxHealth;
     }
 
+    //Change texture on the golem
     public void ChangeElement(Elements element)
     {
         m_elementType = element;

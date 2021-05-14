@@ -29,6 +29,7 @@ public class SandStorm : MonoBehaviour
 
     void Update()
     {
+        //Damages enemies every interval
         if (Time.time >= m_nextDamageTime)
         {
             Damage();

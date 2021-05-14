@@ -44,6 +44,7 @@ public class LivingArmor : MonoBehaviour
 
         m_totalDuration += m_durationIncrease * natureLevel;
 
+        //Diminishing return
         m_totalDamageBlock = (m_totalDamageBlock / (m_totalDamageBlock + 1));
 
         if (m_totalDamageBlock > m_damageBlockCap)
